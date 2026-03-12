@@ -3,496 +3,605 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TreeMap 360 — 세이브트리 × 두꺼비세상</title>
+  <title>TreeMap 360 — 세이브트리</title>
   <link rel="stylesheet" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
   :root{
     --font:'Pretendard',-apple-system,sans-serif;
-    --forest:#0c2218;--g:#16a34a;--g-m:#22c55e;--g-l:#dcfce7;--g-ll:#f0fdf4;
-    --g-d:#14532d;--ink:#0f172a;--ink2:#334155;--ink3:#64748b;--ink4:#94a3b8;
-    --line:#e2e8f0;--bg:#f1f5f9;--white:#fff;
-    --warn:#f59e0b;--warn-l:#fef3c7;--err:#ef4444;--err-l:#fee2e2;
-    --blue:#3b82f6;--blue-l:#dbeafe;--pur:#8b5cf6;--pur-l:#ede9fe;
-    --sb-w:220px;--hdr-h:54px;
+    /* 팔레트 */
+    --bg:        #060d0a;
+    --surface:   #0d1f16;
+    --surface2:  #122a1d;
+    --surface3:  #1a3828;
+    --border:    rgba(0,230,100,.10);
+    --border2:   rgba(255,255,255,.06);
+    --g:         #00e676;
+    --g2:        #00c853;
+    --g-dim:     rgba(0,230,118,.15);
+    --g-glow:    rgba(0,230,118,.25);
+    --cyan:      #00e5ff;
+    --cyan-dim:  rgba(0,229,255,.12);
+    --grad:      linear-gradient(135deg,#00e676 0%,#00e5ff 100%);
+    --grad2:     linear-gradient(135deg,#00c853 0%,#00bcd4 100%);
+    --text:      #e8fff2;
+    --text2:     #8ab89a;
+    --text3:     #4d7a60;
+    --warn:      #ffd740;
+    --warn-dim:  rgba(255,215,64,.12);
+    --err:       #ff5252;
+    --err-dim:   rgba(255,82,82,.12);
+    --blue:      #448aff;
+    --sb-w:      230px;
+    --hdr-h:     58px;
+    --radius:    14px;
+    --radius-sm: 8px;
   }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;overflow:hidden;}
-  body{font-family:var(--font);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
   button{border:none;background:none;cursor:pointer;font-family:var(--font);}
   svg{display:block;}
+
+  /* 스크롤바 */
+  ::-webkit-scrollbar{width:3px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
   /* ── 레이아웃 ── */
   .app{display:flex;height:100vh;}
 
-  /* ── 사이드바 ── */
+  /* ══════════════ 사이드바 ══════════════ */
   .sb{
-    width:var(--sb-w);flex-shrink:0;background:var(--forest);
+    width:var(--sb-w);flex-shrink:0;
+    background:var(--surface);
+    border-right:1px solid var(--border);
     display:flex;flex-direction:column;
-    box-shadow:2px 0 12px rgba(0,0,0,.15);z-index:20;
+    position:relative;z-index:20;
   }
+  /* 좌측 네온 라인 */
+  .sb::after{
+    content:'';position:absolute;top:20%;right:-1px;width:1px;height:60%;
+    background:linear-gradient(to bottom,transparent,var(--g),transparent);
+    opacity:.4;
+  }
+
   .sb-logo{
-    padding:18px 20px 14px;
-    display:flex;align-items:center;gap:10px;
-    border-bottom:1px solid rgba(255,255,255,.07);
+    padding:20px 18px 16px;
+    display:flex;align-items:center;gap:11px;
+    border-bottom:1px solid var(--border2);
   }
   .sb-icon{
-    width:32px;height:32px;background:var(--g);border-radius:8px;
+    width:34px;height:34px;
+    background:var(--grad);
+    border-radius:10px;
     display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    box-shadow:0 2px 8px rgba(34,197,94,.4);
+    box-shadow:0 0 16px var(--g-glow);
   }
-  .sb-icon svg{width:17px;height:17px;color:#fff;}
-  .sb-brand{display:flex;flex-direction:column;}
-  .sb-brand .b1{font-size:13px;font-weight:800;color:#fff;line-height:1;}
-  .sb-brand .b2{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
+  .sb-icon svg{width:16px;height:16px;color:#000;}
+  .sb-brand .b1{font-size:14px;font-weight:900;color:var(--text);letter-spacing:-.3px;}
+  .sb-brand .b2{font-size:10px;color:var(--text3);margin-top:1px;letter-spacing:.3px;}
 
   .sb-site{
-    margin:12px 14px 8px;background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;
+    margin:14px 12px 6px;
+    background:var(--g-dim);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    padding:10px 12px;
   }
-  .sb-site .ss-l{font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px;letter-spacing:.3px;}
-  .sb-site .ss-v{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.85);}
-  .sb-site .ss-n{font-size:11px;color:rgba(255,255,255,.45);}
+  .sb-site .ss-l{font-size:9.5px;color:var(--text3);margin-bottom:3px;letter-spacing:.5px;text-transform:uppercase;}
+  .sb-site .ss-v{font-size:13px;font-weight:800;color:var(--text);}
+  .sb-site .ss-n{font-size:11px;color:var(--text2);margin-top:1px;}
 
   .sb-label{
-    font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-    color:rgba(255,255,255,.25);padding:10px 20px 4px;
+    font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    color:var(--text3);padding:12px 18px 5px;
   }
-  .sb-nav{flex:1;display:flex;flex-direction:column;padding:0 10px;gap:2px;}
-  .sb-ft{padding:10px;border-top:1px solid rgba(255,255,255,.07);}
+  .sb-nav{flex:1;display:flex;flex-direction:column;padding:0 8px;gap:2px;}
+  .sb-ft{padding:10px 8px;border-top:1px solid var(--border2);}
 
   .ni{
-    display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-    cursor:pointer;transition:all .12s;
+    display:flex;align-items:center;gap:10px;padding:9px 12px;
+    border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;
+    position:relative;
   }
-  .ni svg{width:16px;height:16px;color:rgba(255,255,255,.4);flex-shrink:0;}
-  .ni .nt{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);}
+  .ni svg{width:15px;height:15px;color:var(--text3);flex-shrink:0;transition:all .15s;}
+  .ni .nt{font-size:13px;font-weight:600;color:var(--text3);transition:all .15s;}
   .ni .nb{
-    margin-left:auto;font-size:10px;font-weight:700;
-    padding:2px 7px;border-radius:20px;background:var(--err);color:#fff;
+    margin-left:auto;font-size:9.5px;font-weight:800;
+    padding:2px 7px;border-radius:20px;
+    background:var(--err-dim);color:var(--err);
+    border:1px solid rgba(255,82,82,.2);
   }
-  .ni:hover{background:rgba(255,255,255,.06);}
-  .ni:hover svg,.ni:hover .nt{color:rgba(255,255,255,.8);}
-  .ni.on{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.2);}
-  .ni.on svg,.ni.on .nt{color:#4ade80;}
+  .ni:hover{background:var(--g-dim);}
+  .ni:hover svg,.ni:hover .nt{color:var(--text);}
+  .ni.on{background:var(--g-dim);border:1px solid var(--border);}
+  .ni.on svg,.ni.on .nt{color:var(--g);}
+  /* 활성 왼쪽 바 */
+  .ni.on::before{
+    content:'';position:absolute;left:0;top:20%;height:60%;width:2px;
+    background:var(--g);border-radius:2px;
+    box-shadow:0 0 8px var(--g);
+  }
 
-  /* ── 메인 ── */
+  .sb-sep{height:1px;background:var(--border2);margin:8px 0;}
+
+  /* ══════════════ 메인 ══════════════ */
   .main{flex:1;min-width:0;display:flex;flex-direction:column;}
 
-  /* 헤더 */
+  /* ── 헤더 ── */
   .hdr{
-    height:var(--hdr-h);background:var(--white);border-bottom:1px solid var(--line);
+    height:var(--hdr-h);
+    background:rgba(13,31,22,.9);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 24px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.04);z-index:10;
+    padding:0 24px;flex-shrink:0;z-index:10;position:relative;
   }
-  .hdr-l{display:flex;flex-direction:column;}
-  .hdr-l .ht{font-size:15px;font-weight:700;color:var(--ink);}
-  .hdr-l .hs{font-size:12px;color:var(--ink3);}
-  .hdr-r{display:flex;align-items:center;gap:10px;}
+  .hdr-l .ht{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+  .hdr-l .hs{font-size:11.5px;color:var(--text3);margin-top:1px;}
+  .hdr-r{display:flex;align-items:center;gap:8px;}
   .hbtn{
-    display:flex;align-items:center;gap:6px;padding:7px 14px;
-    border:1.5px solid var(--line);border-radius:8px;
-    font-size:12.5px;font-weight:600;color:var(--ink2);transition:all .12s;
+    display:flex;align-items:center;gap:6px;padding:8px 16px;
+    border:1px solid var(--border2);border-radius:var(--radius-sm);
+    font-size:12.5px;font-weight:700;color:var(--text2);transition:all .15s;
   }
-  .hbtn svg{width:14px;height:14px;}
-  .hbtn:hover{border-color:var(--ink4);color:var(--ink);}
-  .hbtn.primary{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.3);}
-  .hbtn.primary:hover{background:var(--g-d);}
+  .hbtn svg{width:13px;height:13px;}
+  .hbtn:hover{border-color:var(--border);color:var(--text);background:var(--surface2);}
+  .hbtn.primary{
+    background:var(--grad);color:#000;border:none;
+    box-shadow:0 0 20px var(--g-glow);font-weight:800;
+  }
+  .hbtn.primary:hover{filter:brightness(1.1);}
   .alert-btn{
-    position:relative;width:34px;height:34px;border-radius:8px;
-    border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;
-    color:var(--ink3);transition:all .12s;
+    position:relative;width:36px;height:36px;border-radius:var(--radius-sm);
+    border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;
+    color:var(--text3);transition:all .15s;
   }
-  .alert-btn:hover{border-color:var(--ink4);color:var(--ink);}
+  .alert-btn:hover{border-color:var(--border);color:var(--text);background:var(--surface2);}
   .alert-btn svg{width:16px;height:16px;}
   .alert-dot{
     position:absolute;top:-3px;right:-3px;width:9px;height:9px;
-    background:var(--err);border-radius:50%;border:2px solid var(--white);
+    background:var(--err);border-radius:50%;border:2px solid var(--bg);
+    animation:pulse-dot 2s infinite;
   }
+  @keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,.4)}70%{box-shadow:0 0 0 5px rgba(255,82,82,0)}}
 
-  /* 화면 컨테이너 */
+  /* ── 화면 컨테이너 ── */
   .screen{display:none;flex:1;overflow-y:auto;flex-direction:column;}
   .screen.on{display:flex;}
-  .screen::-webkit-scrollbar{width:4px;}
-  .screen::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
 
-  /* ══════════════════════════════
-     화면 1: 대시보드
-  ══════════════════════════════ */
-  .dash{padding:24px;}
+  /* ══════════════════════════════════════
+     화면 0: 대시보드
+  ══════════════════════════════════════ */
+  .dash{padding:22px 24px;display:flex;flex-direction:column;gap:18px;}
 
-  /* KPI 카드 그리드 */
-  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  /* KPI 벤토 그리드 */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   .kpi{
-    background:var(--white);border:1px solid var(--line);border-radius:12px;
-    padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.04);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    position:relative;overflow:hidden;
+    transition:border-color .2s;
   }
-  .kpi .kl{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .kpi .km{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.3px;}
-  .kpi .ki{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+  .kpi:hover{border-color:rgba(0,230,118,.25);}
+  /* 배경 글로우 */
+  .kpi::before{
+    content:'';position:absolute;top:-30px;right:-30px;
+    width:80px;height:80px;border-radius:50%;
+    background:var(--g-dim);filter:blur(20px);pointer-events:none;
+  }
+  .kpi.kpi-warn::before{background:var(--warn-dim);}
+  .kpi.kpi-err::before{background:var(--err-dim);}
+  .kpi.kpi-blue::before{background:var(--cyan-dim);}
+  .kpi .kl{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .kpi .km{font-size:10.5px;font-weight:700;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;}
+  .kpi .ki{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+  }
   .kpi .ki svg{width:15px;height:15px;}
-  .kpi .kv{font-size:26px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px;}
-  .kpi .ksub{font-size:11.5px;color:var(--ink3);}
-  .kpi .ksub .up{color:var(--g);font-weight:600;}
-  .kpi .ksub .down{color:var(--err);font-weight:600;}
+  .ki-g{background:var(--g-dim);} .ki-g svg{color:var(--g);}
+  .ki-w{background:var(--warn-dim);} .ki-w svg{color:var(--warn);}
+  .ki-e{background:var(--err-dim);} .ki-e svg{color:var(--err);}
+  .ki-c{background:var(--cyan-dim);} .ki-c svg{color:var(--cyan);}
+  .kpi .kv{font-size:30px;font-weight:900;letter-spacing:-1px;line-height:1;margin-bottom:5px;}
+  .kv-g{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .kv-w{color:var(--warn);}
+  .kv-e{color:var(--err);}
+  .kv-c{color:var(--cyan);}
+  .kpi .ksub{font-size:11px;color:var(--text3);}
+  .ksub .up{color:var(--g);font-weight:700;}
+  .ksub .down{color:var(--err);font-weight:700;}
 
-  .dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;}
+  /* 벤토 2열 */
+  .dash-row{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;}
 
-  /* 건강 분포 카드 */
-  .panel{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .panel{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px;
+  }
   .panel-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-  .panel-hd h3{font-size:14px;font-weight:700;color:var(--ink);}
-  .panel-hd .ptag{font-size:11px;color:var(--ink3);}
+  .panel-hd h3{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.2px;}
+  .panel-hd .ptag{font-size:11px;color:var(--text3);}
+  .ptag-live{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:10.5px;font-weight:700;color:var(--g);
+  }
+  .ptag-live::before{
+    content:'';width:6px;height:6px;border-radius:50%;background:var(--g);
+    animation:pulse-dot 1.5s infinite;
+  }
 
-  .health-bars{display:flex;flex-direction:column;gap:10px;}
-  .hb-item{display:flex;align-items:center;gap:10px;}
-  .hb-label{font-size:12px;font-weight:600;width:70px;color:var(--ink2);}
-  .hb-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden;}
-  .hb-fill{height:100%;border-radius:4px;transition:width .8s .2s ease;}
-  .hb-num{font-size:12px;font-weight:700;width:36px;text-align:right;}
-  .hb-pct{font-size:11px;color:var(--ink4);width:34px;text-align:right;}
+  /* 건강 분포 바 */
+  .health-bars{display:flex;flex-direction:column;gap:12px;}
+  .hb-item{display:grid;grid-template-columns:68px 1fr 38px 38px;align-items:center;gap:10px;}
+  .hb-label{font-size:12px;font-weight:700;color:var(--text2);}
+  .hb-track{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+  .hb-fill{height:100%;border-radius:3px;transition:width .8s .2s ease;}
+  .hb-num{font-size:12.5px;font-weight:800;text-align:right;}
+  .hb-pct{font-size:11px;color:var(--text3);text-align:right;}
+  .hA .hb-fill{background:linear-gradient(90deg,#00e676,#69f0ae);} .hA .hb-num{color:#69f0ae;}
+  .hB .hb-fill{background:linear-gradient(90deg,#b2ff59,#ccff90);} .hB .hb-num{color:#b2ff59;}
+  .hC .hb-fill{background:linear-gradient(90deg,#ffd740,#ffe57f);} .hC .hb-num{color:#ffd740;}
+  .hD .hb-fill{background:linear-gradient(90deg,#ff5252,#ff8a80);} .hD .hb-num{color:#ff5252;}
 
-  .health-A .hb-fill{background:#22c55e;} .health-A .hb-num{color:#166534;}
-  .health-B .hb-fill{background:#84cc16;} .health-B .hb-num{color:#3f6212;}
-  .health-C .hb-fill{background:#f59e0b;} .health-C .hb-num{color:#92400e;}
-  .health-D .hb-fill{background:#ef4444;} .health-D .hb-num{color:#991b1b;}
-
-  /* 알림 목록 */
+  /* 알림 카드 */
   .alert-list{display:flex;flex-direction:column;gap:8px;}
   .al-item{
-    border:1px solid var(--line);border-radius:8px;padding:10px 12px;
-    display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:all .12s;
+    background:var(--surface2);border:1px solid var(--border2);
+    border-radius:var(--radius-sm);padding:10px 12px;
+    display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:all .15s;
   }
-  .al-item:hover{border-color:var(--ink4);box-shadow:0 1px 6px rgba(0,0,0,.06);}
-  .al-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-  .al-dot.err{background:var(--err);}
-  .al-dot.warn{background:var(--warn);}
-  .al-dot.info{background:var(--blue);}
-  .al-item h5{font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-  .al-item p{font-size:11.5px;color:var(--ink3);}
-  .al-item .al-time{font-size:11px;color:var(--ink4);margin-left:auto;white-space:nowrap;padding-top:2px;}
+  .al-item:hover{border-color:var(--border);transform:translateX(2px);}
+  .al-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+  .al-dot.e{background:var(--err);box-shadow:0 0 6px var(--err);}
+  .al-dot.w{background:var(--warn);box-shadow:0 0 6px var(--warn);}
+  .al-dot.i{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+  .al-item h5{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;}
+  .al-item p{font-size:11.5px;color:var(--text3);}
+  .al-time{font-size:10.5px;color:var(--text3);margin-left:auto;white-space:nowrap;padding-top:2px;}
 
-  /* ESG 패널 */
-  .esg-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-  .esg-card{background:var(--g-ll);border:1px solid var(--g-l);border-radius:8px;padding:12px;text-align:center;}
-  .esg-card .ev{font-size:18px;font-weight:800;color:var(--g-d);line-height:1;margin-bottom:3px;}
-  .esg-card .ek{font-size:11px;color:var(--g);font-weight:600;}
-  .esg-card .es{font-size:10.5px;color:var(--ink3);margin-top:1px;}
+  /* ESG 카드 */
+  .esg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .esg-card{
+    background:var(--g-dim);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px;text-align:center;position:relative;overflow:hidden;
+  }
+  .esg-card::after{
+    content:'';position:absolute;bottom:-15px;right:-15px;
+    width:50px;height:50px;border-radius:50%;
+    background:rgba(0,230,118,.08);filter:blur(10px);
+  }
+  .esg-card .ev{
+    font-size:20px;font-weight:900;letter-spacing:-.5px;
+    background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    margin-bottom:3px;
+  }
+  .esg-card .ek{font-size:11px;font-weight:700;color:var(--g);}
+  .esg-card .es{font-size:10.5px;color:var(--text3);margin-top:2px;}
 
-  /* ══════════════════════════════
-     화면 2: 트리맵
-  ══════════════════════════════ */
+  /* ══════════════════════════════════════
+     화면 1: 트리맵
+  ══════════════════════════════════════ */
   .map-wrap{display:flex;flex:1;overflow:hidden;}
   .map-controls{
-    width:240px;flex-shrink:0;background:var(--white);border-right:1px solid var(--line);
-    display:flex;flex-direction:column;padding:16px;gap:14px;overflow-y:auto;
+    width:240px;flex-shrink:0;
+    background:var(--surface);border-right:1px solid var(--border);
+    overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;
   }
-  .ctrl-sec h4{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:.2px;}
+  .ctrl-h{font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;}
+  .search-inp{
+    width:100%;background:var(--surface2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:9px 12px;
+    font-size:12.5px;font-family:var(--font);color:var(--text);outline:none;transition:all .15s;
+  }
+  .search-inp::placeholder{color:var(--text3);}
+  .search-inp:focus{border-color:rgba(0,230,118,.4);background:var(--surface3);}
+
   .filter-btn{
-    display:flex;align-items:center;gap:8px;padding:7px 10px;
-    border:1.5px solid var(--line);border-radius:7px;cursor:pointer;transition:all .12s;
-    font-size:12.5px;font-weight:500;color:var(--ink2);background:var(--white);
+    display:flex;align-items:center;gap:8px;padding:8px 10px;
+    background:var(--surface2);border:1px solid var(--border2);
+    border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;
+    font-size:12.5px;font-weight:600;color:var(--text2);
     width:100%;text-align:left;font-family:var(--font);
   }
-  .filter-btn:hover{border-color:var(--ink4);}
-  .filter-btn.on{border-color:var(--g);background:var(--g-ll);color:var(--g-d);}
-  .filter-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-  .filter-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--ink4);}
-  .filter-count.on{color:var(--g);}
+  .filter-btn:hover{border-color:var(--border);color:var(--text);}
+  .filter-btn.on{border-color:var(--border);background:var(--g-dim);color:var(--text);}
+  .filter-btn.on-err{border-color:rgba(255,82,82,.3);background:var(--err-dim);color:var(--err);}
+  .filter-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .filter-count{margin-left:auto;font-size:11px;font-weight:800;color:var(--text3);}
+  .filter-count.g{color:var(--g);}
+  .filter-count.e{color:var(--err);}
 
-  .search-inp{
-    width:100%;border:1.5px solid var(--line);border-radius:7px;
-    padding:8px 12px;font-size:12.5px;font-family:var(--font);
-    color:var(--ink);background:var(--bg);outline:none;
-  }
-  .search-inp:focus{border-color:var(--g);background:var(--white);}
-
-  /* 지도 영역 */
-  .map-area{flex:1;position:relative;background:#e8efea;overflow:hidden;}
+  /* 지도 */
+  .map-area{flex:1;position:relative;background:#040c07;overflow:hidden;}
   .map-bg{position:absolute;inset:0;}
-  /* 단지 도면 SVG 배경 */
-  .map-canvas{position:absolute;inset:0;}
 
   /* 수목 마커 */
   .tree-marker{
     position:absolute;transform:translate(-50%,-50%);
-    width:20px;height:20px;border-radius:50%;
+    width:18px;height:18px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    cursor:pointer;transition:all .15s;border:2px solid #fff;
-    box-shadow:0 2px 6px rgba(0,0,0,.2);
-    font-size:9px;font-weight:800;color:#fff;
+    cursor:pointer;transition:all .15s;border:1.5px solid rgba(0,0,0,.4);
+    font-size:8px;font-weight:900;color:#000;
   }
-  .tree-marker:hover{transform:translate(-50%,-50%) scale(1.3);z-index:10;}
-  .tree-marker.A{background:#22c55e;}
-  .tree-marker.B{background:#84cc16;}
-  .tree-marker.C{background:#f59e0b;}
-  .tree-marker.D{background:#ef4444;animation:pulse-red 2s infinite;}
-  .tree-marker.sel{transform:translate(-50%,-50%) scale(1.4);z-index:20;box-shadow:0 0 0 4px rgba(255,255,255,.5),0 4px 12px rgba(0,0,0,.3);}
-  @keyframes pulse-red{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.2)}50%{box-shadow:0 0 0 6px rgba(239,68,68,.25),0 2px 6px rgba(0,0,0,.2)}}
+  .tree-marker:hover{transform:translate(-50%,-50%) scale(1.4);z-index:10;}
+  .tree-marker.A{background:#00e676;box-shadow:0 0 8px rgba(0,230,118,.5);}
+  .tree-marker.B{background:#b2ff59;box-shadow:0 0 6px rgba(178,255,89,.4);}
+  .tree-marker.C{background:#ffd740;box-shadow:0 0 6px rgba(255,215,64,.4);}
+  .tree-marker.D{background:#ff5252;box-shadow:0 0 8px rgba(255,82,82,.6);animation:pulse-err 2s infinite;}
+  .tree-marker.sel{transform:translate(-50%,-50%) scale(1.5);z-index:20;}
+  @keyframes pulse-err{0%,100%{box-shadow:0 0 8px rgba(255,82,82,.6)}50%{box-shadow:0 0 16px rgba(255,82,82,.9),0 0 24px rgba(255,82,82,.3)}}
 
   /* 팝업 */
   .tree-popup{
-    position:absolute;background:var(--white);border:1px solid var(--line);border-radius:10px;
-    padding:12px 14px;box-shadow:0 4px 20px rgba(0,0,0,.12);min-width:180px;z-index:30;
-    pointer-events:all;display:none;
+    position:absolute;
+    background:rgba(13,31,22,.95);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(0,230,118,.05);
+    min-width:190px;z-index:30;pointer-events:all;display:none;
   }
   .tree-popup.vis{display:block;}
-  .tp-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-  .tp-hd h4{font-size:13px;font-weight:700;color:var(--ink);}
-  .tp-close{color:var(--ink4);cursor:pointer;line-height:1;}
-  .tp-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:4px;}
-  .tp-row .tpk{color:var(--ink3);}
-  .tp-row .tpv{color:var(--ink);font-weight:600;}
-  .tp-btns{display:flex;gap:6px;margin-top:10px;}
+  .tp-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .tp-hd h4{font-size:13.5px;font-weight:800;color:var(--text);}
+  .tp-close{color:var(--text3);cursor:pointer;font-size:14px;line-height:1;}
+  .tp-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;}
+  .tp-row .tpk{color:var(--text3);}
+  .tp-row .tpv{color:var(--text);font-weight:700;}
+  .tp-btns{display:flex;gap:6px;margin-top:12px;}
   .tp-btn{
-    flex:1;padding:6px 0;border-radius:6px;font-size:12px;font-weight:600;
-    font-family:var(--font);cursor:pointer;transition:all .12s;
+    flex:1;padding:7px 0;border-radius:var(--radius-sm);font-size:12px;font-weight:700;
+    font-family:var(--font);cursor:pointer;transition:all .15s;
   }
-  .tp-btn.primary{background:var(--g);color:#fff;border:none;}
-  .tp-btn.secondary{background:var(--white);color:var(--ink2);border:1.5px solid var(--line);}
-  .tp-btn.primary:hover{background:var(--g-d);}
+  .tp-btn.primary{background:var(--grad);color:#000;border:none;}
+  .tp-btn.secondary{background:var(--surface3);color:var(--text2);border:1px solid var(--border);}
+  .tp-btn:hover{filter:brightness(1.1);}
 
   /* 범례 */
   .map-legend{
-    position:absolute;bottom:16px;left:16px;background:var(--white);
-    border:1px solid var(--line);border-radius:8px;padding:10px 14px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    position:absolute;bottom:16px;left:16px;
+    background:rgba(13,31,22,.9);backdrop-filter:blur(12px);
+    border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;
   }
-  .ml-title{font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase;}
-  .ml-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11.5px;color:var(--ink2);}
-  .ml-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .ml-title{font-size:9.5px;font-weight:800;color:var(--text3);margin-bottom:7px;letter-spacing:.4px;text-transform:uppercase;}
+  .ml-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:11.5px;color:var(--text2);}
+  .ml-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 
-  /* 드래그 힌트 */
   .drag-hint{
     position:absolute;top:16px;left:50%;transform:translateX(-50%);
-    background:rgba(15,23,42,.75);color:rgba(255,255,255,.9);
-    font-size:11.5px;font-weight:500;padding:7px 14px;border-radius:20px;
-    display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px);
-    transition:opacity .3s;
+    background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+    color:rgba(255,255,255,.7);font-size:11.5px;font-weight:600;
+    padding:7px 16px;border-radius:20px;border:1px solid var(--border2);
+    display:flex;align-items:center;gap:6px;transition:opacity .4s;
   }
-  .drag-hint svg{width:14px;height:14px;flex-shrink:0;}
-
-  /* 수목 카운트 배지 */
+  .drag-hint svg{width:13px;height:13px;}
   .tree-count{
-    position:absolute;top:16px;right:16px;background:var(--white);
-    border:1px solid var(--line);border-radius:8px;padding:8px 14px;
-    font-size:12px;font-weight:600;color:var(--ink2);box-shadow:0 2px 6px rgba(0,0,0,.06);
+    position:absolute;top:16px;right:16px;
+    background:rgba(13,31,22,.9);backdrop-filter:blur(12px);
+    border:1px solid var(--border);border-radius:var(--radius-sm);
+    font-size:12px;font-weight:600;color:var(--text2);padding:7px 14px;
   }
+  .tree-count strong{color:var(--g);font-weight:800;}
 
-  /* ══════════════════════════════
-     화면 3: 수목 상세
-  ══════════════════════════════ */
+  /* ══════════════════════════════════════
+     화면 2: 수목 상세
+  ══════════════════════════════════════ */
   .detail-wrap{display:flex;flex:1;overflow:hidden;}
   .detail-list{
-    width:280px;flex-shrink:0;background:var(--white);border-right:1px solid var(--line);
-    overflow-y:auto;
+    width:270px;flex-shrink:0;
+    background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;
   }
-  .detail-list::-webkit-scrollbar{width:3px;}
-  .detail-list::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
-  .dl-search{padding:12px;border-bottom:1px solid var(--line);}
+  .dl-search{padding:12px;border-bottom:1px solid var(--border);}
   .dl-search input{
-    width:100%;border:1.5px solid var(--line);border-radius:7px;
-    padding:7px 12px;font-size:12.5px;font-family:var(--font);outline:none;
-    color:var(--ink);
+    width:100%;background:var(--surface2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:8px 12px;
+    font-size:12.5px;font-family:var(--font);color:var(--text);outline:none;
   }
-  .dl-search input:focus{border-color:var(--g);}
+  .dl-search input::placeholder{color:var(--text3);}
+  .dl-search input:focus{border-color:rgba(0,230,118,.4);}
+
   .tl-item{
-    padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;
-    transition:background .1s;display:flex;gap:10px;align-items:center;
+    padding:10px 14px;border-bottom:1px solid var(--border2);cursor:pointer;
+    transition:all .12s;display:flex;gap:10px;align-items:center;
   }
-  .tl-item:hover{background:var(--bg);}
-  .tl-item.on{background:var(--g-ll);border-left:3px solid var(--g);}
+  .tl-item:hover{background:var(--surface2);}
+  .tl-item.on{background:var(--g-dim);border-left:2px solid var(--g);}
   .tl-badge{
-    width:28px;height:28px;border-radius:8px;flex-shrink:0;
+    width:26px;height:26px;border-radius:7px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
-    font-size:11px;font-weight:800;color:#fff;
+    font-size:10px;font-weight:900;color:#000;
   }
-  .tl-badge.A{background:#22c55e;} .tl-badge.B{background:#84cc16;}
-  .tl-badge.C{background:#f59e0b;} .tl-badge.D{background:#ef4444;}
-  .tl-info h5{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-  .tl-info p{font-size:11.5px;color:var(--ink3);}
+  .tl-badge.A{background:#00e676;} .tl-badge.B{background:#b2ff59;}
+  .tl-badge.C{background:#ffd740;} .tl-badge.D{background:#ff5252;}
+  .tl-info h5{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+  .tl-info p{font-size:11.5px;color:var(--text3);}
   .tl-alert{margin-left:auto;flex-shrink:0;}
-  .tl-alert svg{width:14px;height:14px;color:var(--err);}
+  .tl-alert svg{width:13px;height:13px;color:var(--err);}
 
   /* 상세 패널 */
-  .detail-panel{flex:1;overflow-y:auto;padding:20px 24px;}
-  .detail-panel::-webkit-scrollbar{width:4px;}
-  .detail-panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
-
-  .dp-hd{
-    display:flex;align-items:flex-start;justify-content:space-between;
-    margin-bottom:18px;
-  }
-  .dp-hd h2{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:4px;}
-  .dp-hd p{font-size:13px;color:var(--ink3);}
+  .detail-panel{flex:1;overflow-y:auto;padding:22px 26px;}
+  .dp-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+  .dp-hd h2{font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:4px;}
+  .dp-hd h2 span{font-size:14px;font-weight:500;color:var(--text3);}
+  .dp-hd p{font-size:12.5px;color:var(--text3);}
   .dp-actions{display:flex;gap:8px;flex-shrink:0;}
   .dp-act{
-    padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;
-    font-family:var(--font);cursor:pointer;transition:all .12s;
-    display:flex;align-items:center;gap:6px;
+    padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;
+    font-family:var(--font);cursor:pointer;transition:all .13s;
+    display:flex;align-items:center;gap:7px;
   }
-  .dp-act svg{width:14px;height:14px;}
-  .dp-act.primary{background:var(--g);color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.25);}
-  .dp-act.secondary{background:var(--white);color:var(--ink2);border:1.5px solid var(--line);}
-  .dp-act.primary:hover{background:var(--g-d);}
-  .dp-act.cloud{background:#1e293b;color:#94a3b8;border:1.5px solid #334155;}
-  .dp-act.cloud:hover{color:#e2e8f0;border-color:#475569;}
+  .dp-act svg{width:13px;height:13px;}
+  .dp-act.primary{background:var(--grad);color:#000;border:none;box-shadow:0 0 16px var(--g-glow);}
+  .dp-act.secondary{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+  .dp-act.cloud{background:var(--surface2);color:var(--cyan);border:1px solid rgba(0,229,255,.2);}
+  .dp-act:hover{filter:brightness(1.1);}
 
-  /* 속성 카드 그리드 */
-  .attr-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+  /* 속성 카드 */
+  .attr-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
   .attr-card{
-    background:var(--white);border:1px solid var(--line);border-radius:10px;
-    padding:12px 14px;text-align:center;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px;text-align:center;
   }
-  .attr-card .av{font-size:20px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:3px;}
-  .attr-card .ak{font-size:10.5px;color:var(--ink3);font-weight:500;}
+  .attr-card .av{
+    font-size:22px;font-weight:900;letter-spacing:-.5px;line-height:1;margin-bottom:4px;
+    background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .attr-card .ak{font-size:10.5px;color:var(--text3);font-weight:600;}
 
-  /* 건강 등급 배지 */
-  .health-grade{
-    display:inline-flex;align-items:center;gap:6px;
-    padding:5px 12px;border-radius:20px;font-size:13px;font-weight:700;
-  }
-  .health-grade.A{background:var(--g-l);color:#166534;}
-  .health-grade.B{background:#d9f99d;color:#3f6212;}
-  .health-grade.C{background:var(--warn-l);color:#92400e;}
-  .health-grade.D{background:var(--err-l);color:#991b1b;}
+  /* 건강 등급 뱃지 */
+  .hg{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12.5px;font-weight:800;}
+  .hg.A{background:var(--g-dim);color:var(--g);border:1px solid rgba(0,230,118,.2);}
+  .hg.B{background:rgba(178,255,89,.1);color:#b2ff59;border:1px solid rgba(178,255,89,.2);}
+  .hg.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(255,215,64,.2);}
+  .hg.D{background:var(--err-dim);color:var(--err);border:1px solid rgba(255,82,82,.2);}
 
   /* 센서 카드 */
-  .sensor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px;}
+  .sensor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
   .sensor-card{
-    background:var(--white);border:1px solid var(--line);border-radius:10px;
-    padding:14px 16px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px 16px;
   }
-  .sensor-card.alert{border-color:var(--err);background:var(--err-l);}
+  .sensor-card.alert{border-color:rgba(255,82,82,.3);background:var(--err-dim);}
+  .sensor-card.warn{border-color:rgba(255,215,64,.3);background:var(--warn-dim);}
   .sc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-  .sc-top .sct{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.3px;text-transform:uppercase;}
-  .sc-top .sca{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--err);font-weight:600;}
-  .sc-top .sca svg{width:12px;height:12px;}
-  .sc-val{font-size:26px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:2px;}
-  .sc-val .unit{font-size:14px;font-weight:600;color:var(--ink3);}
-  .sc-range{font-size:11px;color:var(--ink4);}
-  .sc-bar-track{height:4px;background:var(--bg);border-radius:2px;margin-top:8px;overflow:hidden;}
+  .sc-top .sct{font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;}
+  .sc-alert-tag{display:flex;align-items:center;gap:3px;font-size:10px;font-weight:800;}
+  .sc-alert-tag svg{width:11px;height:11px;}
+  .tag-err{color:var(--err);}
+  .tag-warn{color:var(--warn);}
+  .sc-val{font-size:28px;font-weight:900;letter-spacing:-.5px;line-height:1;margin-bottom:2px;}
+  .sc-val .unit{font-size:13px;font-weight:600;color:var(--text3);}
+  .sc-range{font-size:11px;color:var(--text3);}
+  .sc-bar-track{height:3px;background:var(--surface3);border-radius:2px;margin-top:10px;overflow:hidden;}
   .sc-bar-fill{height:100%;border-radius:2px;}
-  .sc-bar-fill.ok{background:var(--g);}
-  .sc-bar-fill.warn{background:var(--warn);}
-  .sc-bar-fill.err{background:var(--err);}
+  .fill-g{background:var(--g);}
+  .fill-w{background:var(--warn);}
+  .fill-e{background:var(--err);}
 
-  /* 7일 차트 (CSS 바 차트) */
-  .chart-wrap{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:18px;}
+  /* 차트 */
+  .chart-wrap{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px 20px;margin-bottom:20px;
+  }
   .chart-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-  .chart-hd h4{font-size:13.5px;font-weight:700;color:var(--ink);}
+  .chart-hd h4{font-size:14px;font-weight:800;color:var(--text);}
   .chart-tabs{display:flex;gap:4px;}
   .chart-tab{
-    padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;
-    color:var(--ink3);cursor:pointer;font-family:var(--font);
+    padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:700;
+    color:var(--text3);cursor:pointer;font-family:var(--font);transition:all .12s;
   }
-  .chart-tab.on{background:var(--g-ll);color:var(--g-d);}
+  .chart-tab.on{background:var(--g-dim);color:var(--g);}
   .chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px;}
   .chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
-  .chart-bar{width:100%;border-radius:3px 3px 0 0;background:var(--g-l);transition:background .13s;cursor:pointer;}
-  .chart-bar:hover{background:var(--g);}
-  .chart-bar.hl{background:var(--g);}
-  .chart-lbl{font-size:9px;color:var(--ink4);}
-  .chart-val{font-size:9.5px;font-weight:700;color:var(--ink3);}
+  .chart-bar{width:100%;border-radius:4px 4px 0 0;background:var(--surface3);transition:all .13s;cursor:pointer;position:relative;}
+  .chart-bar:hover{filter:brightness(1.2);}
+  .chart-bar.hl{background:linear-gradient(to top,var(--g),rgba(0,230,118,.5));}
+  .chart-bar.med{background:linear-gradient(to top,var(--warn),rgba(255,215,64,.5));}
+  .chart-bar.low{background:linear-gradient(to top,var(--err),rgba(255,82,82,.5));}
+  .chart-lbl{font-size:9px;color:var(--text3);}
+  .chart-val{font-size:9.5px;font-weight:800;color:var(--text2);}
 
   /* EMR 타임라인 */
-  .emr-tl{display:flex;flex-direction:column;gap:0;}
+  .sec-label{font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;}
+  .emr-tl{display:flex;flex-direction:column;}
   .emr-item{display:flex;gap:12px;}
-  .emr-l{display:flex;flex-direction:column;align-items:center;width:24px;flex-shrink:0;}
-  .emr-dot{width:10px;height:10px;border-radius:50%;background:var(--g-l);border:2px solid var(--g);flex-shrink:0;margin-top:2px;}
-  .emr-line{width:1px;flex:1;background:var(--line);margin:3px 0;}
-  .emr-c{padding:0 0 16px;flex:1;}
-  .emr-c .et{font-size:12px;color:var(--ink4);margin-bottom:3px;}
-  .emr-c h5{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
-  .emr-c p{font-size:12.5px;color:var(--ink3);line-height:1.6;}
+  .emr-l{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0;}
+  .emr-dot{width:9px;height:9px;border-radius:50%;background:var(--surface3);border:2px solid var(--g);flex-shrink:0;margin-top:3px;}
+  .emr-dot.alert{border-color:var(--err);box-shadow:0 0 6px var(--err);}
+  .emr-line{width:1px;flex:1;background:var(--border);margin:4px 0;}
+  .emr-c{padding:0 0 18px;flex:1;}
+  .emr-c .et{font-size:11px;color:var(--text3);margin-bottom:3px;}
+  .emr-c h5{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px;}
+  .emr-c p{font-size:12px;color:var(--text3);line-height:1.65;}
 
-  /* ══════════════════════════════
-     화면 4: 포인트 클라우드
-  ══════════════════════════════ */
+  /* ══════════════════════════════════════
+     화면 3: 포인트 클라우드
+  ══════════════════════════════════════ */
   .pc-wrap{display:flex;flex:1;overflow:hidden;}
   .pc-info{
-    width:280px;flex-shrink:0;background:var(--white);border-right:1px solid var(--line);
+    width:270px;flex-shrink:0;
+    background:var(--surface);border-right:1px solid var(--border);
     display:flex;flex-direction:column;
   }
-  .pc-info-hd{padding:16px 18px;border-bottom:1px solid var(--line);}
-  .pc-info-hd h3{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-  .pc-info-hd p{font-size:12px;color:var(--ink3);}
+  .pc-info-hd{padding:18px;border-bottom:1px solid var(--border);}
+  .pc-info-hd h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px;}
+  .pc-info-hd p{font-size:11.5px;color:var(--text3);}
   .pc-attrs{flex:1;padding:16px 18px;overflow-y:auto;}
-  .pca-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;}
-  .pca-row:last-child{border-bottom:none;}
-  .pca-row .pk{color:var(--ink3);}
-  .pca-row .pv{color:var(--ink);font-weight:600;}
-  .pc-actions{padding:14px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
+  .pca-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+  .pca-row:last-child{border:none;}
+  .pca-row .pk{color:var(--text3);}
+  .pca-row .pv{color:var(--text);font-weight:700;}
+  .pc-actions{padding:14px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;}
   .pc-btn{
-    padding:10px;border-radius:8px;font-size:13px;font-weight:700;
+    padding:11px;border-radius:var(--radius-sm);font-size:13px;font-weight:800;
     font-family:var(--font);cursor:pointer;text-align:center;transition:all .13s;
-    display:flex;align-items:center;justify-content:center;gap:7px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
   }
   .pc-btn svg{width:15px;height:15px;}
-  .pc-btn.main{background:var(--g);color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);}
-  .pc-btn.main:hover{background:var(--g-d);}
-  .pc-btn.sec{background:var(--white);color:var(--ink2);border:1.5px solid var(--line);}
-  .pc-btn.sec:hover{border-color:var(--ink4);}
-  .pc-main{flex:1;position:relative;overflow:hidden;}
-  .pc-preview{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    background:linear-gradient(135deg,#0a1628 0%,#0d2e1a 60%,#0f1f0d 100%);
-  }
-  /* 포인트 클라우드 시각 시뮬레이션 */
-  .pc-points{position:absolute;inset:0;}
-  .pc-overlay{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;z-index:2;
-  }
-  .pc-icon{
-    width:80px;height:80px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);
-    border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;
-  }
-  .pc-icon svg{width:40px;height:40px;color:#4ade80;}
-  .pc-overlay h3{font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;}
-  .pc-overlay p{font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:20px;line-height:1.6;}
-  .pc-launch{
-    padding:12px 28px;background:var(--g);color:#fff;border-radius:10px;
-    font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;
-    display:flex;align-items:center;gap:8px;
-    box-shadow:0 4px 16px rgba(22,163,74,.4);transition:all .13s;
-  }
-  .pc-launch:hover{background:var(--g-d);transform:translateY(-1px);}
-  .pc-launch svg{width:16px;height:16px;}
-  .pc-badge{
-    position:absolute;top:16px;left:16px;background:rgba(0,0,0,.5);
-    color:rgba(255,255,255,.6);font-size:11px;padding:5px 10px;border-radius:6px;
-    backdrop-filter:blur(4px);z-index:3;
-  }
+  .pc-btn.main{background:var(--grad);color:#000;border:none;box-shadow:0 0 20px var(--g-glow);}
+  .pc-btn.main:hover{filter:brightness(1.1);}
+  .pc-btn.sec{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+  .pc-btn.sec:hover{border-color:var(--border2);}
 
-  /* ── 공통 ── */
-  .divider{height:1px;background:var(--line);margin:14px 0;}
-  .section-label{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px;}
+  /* 3D 뷰어 영역 */
+  .pc-main{flex:1;position:relative;overflow:hidden;background:#020805;}
+  .pc-preview{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .pc-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;}
+  .pc-icon{
+    width:72px;height:72px;
+    background:var(--g-dim);border:1px solid var(--border);border-radius:18px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+    box-shadow:0 0 24px var(--g-glow);
+  }
+  .pc-icon svg{width:34px;height:34px;color:var(--g);}
+  .pc-overlay h3{font-size:18px;font-weight:900;color:var(--text);margin-bottom:8px;letter-spacing:-.3px;}
+  .pc-overlay p{font-size:13px;color:var(--text3);text-align:center;margin-bottom:22px;line-height:1.6;max-width:280px;}
+  .pc-launch{
+    padding:12px 28px;background:var(--grad);color:#000;border-radius:var(--radius-sm);
+    font-size:14px;font-weight:900;font-family:var(--font);cursor:pointer;
+    display:flex;align-items:center;gap:8px;border:none;
+    box-shadow:0 0 24px var(--g-glow);transition:all .15s;
+  }
+  .pc-launch:hover{filter:brightness(1.1);transform:translateY(-1px);}
+  .pc-launch svg{width:15px;height:15px;}
+  .pc-badge{
+    position:absolute;top:16px;left:16px;
+    background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+    color:var(--text3);font-size:11px;padding:5px 12px;border-radius:6px;
+    border:1px solid var(--border2);z-index:3;
+  }
+  /* 캔버스 */
+  #pcCanvas{position:absolute;inset:0;width:100%;height:100%;}
   </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ── 사이드바 ── -->
+  <!-- ══ 사이드바 ══ -->
   <nav class="sb">
     <div class="sb-logo">
       <div class="sb-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M12 22V12M12 12C12 7 8 3 3 3s0 9 9 9M12 12c0-5 4-9 9-9s0 9-9 9"/>
         </svg>
       </div>
       <div class="sb-brand">
         <div class="b1">TreeMap 360</div>
-        <div class="b2">by 세이브트리</div>
+        <div class="b2">by SaveTree × Greehill</div>
       </div>
     </div>
     <div class="sb-site">
-      <div class="ss-l">현재 단지</div>
+      <div class="ss-l">Current Site</div>
       <div class="ss-v">헬리오시티</div>
       <div class="ss-n">송파구 · 수목 247그루</div>
     </div>
-    <div class="sb-label">관리 메뉴</div>
+    <div class="sb-label">Navigation</div>
     <div class="sb-nav">
       <div class="ni on" onclick="nav(0)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -511,7 +620,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
         <span class="nt">포인트 클라우드</span>
       </div>
-      <div class="divider" style="margin:8px 0;"></div>
+      <div class="sb-sep"></div>
       <div class="ni">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="nt">알림 센터</span>
@@ -522,7 +631,7 @@
         <span class="nt">진단 리포트</span>
       </div>
       <div class="ni">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="nt">점검 일정</span>
       </div>
     </div>
@@ -534,9 +643,8 @@
     </div>
   </nav>
 
-  <!-- ── 메인 영역 ── -->
+  <!-- ══ 메인 ══ -->
   <div class="main">
-
     <!-- 헤더 -->
     <div class="hdr">
       <div class="hdr-l">
@@ -549,7 +657,7 @@
           리포트 내보내기
         </button>
         <button class="hbtn primary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           수목 등록
         </button>
         <button class="alert-btn">
@@ -559,99 +667,65 @@
       </div>
     </div>
 
-    <!-- ── 화면 0: 대시보드 ── -->
+    <!-- ══ 화면 0: 대시보드 ══ -->
     <div class="screen on" id="screen0">
       <div class="dash">
         <!-- KPI -->
-        <div class="kpi-row">
+        <div class="kpi-grid">
           <div class="kpi">
-            <div class="kl"><div class="km">총 수목 수</div><div class="ki" style="background:#f0fdf4"><svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22V12M12 12C12 7 8 3 3 3s0 9 9 9M12 12c0-5 4-9 9-9s0 9-9 9"/></svg></div></div>
-            <div class="kv">247</div>
-            <div class="ksub"><span class="up">+12 이번 달 등록</span></div>
+            <div class="kl"><div class="km">총 수목 수</div><div class="ki ki-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12M12 12C12 7 8 3 3 3s0 9 9 9M12 12c0-5 4-9 9-9s0 9-9 9"/></svg></div></div>
+            <div class="kv kv-g">247</div>
+            <div class="ksub"><span class="up">+12</span> 이번 달 등록</div>
           </div>
-          <div class="kpi">
-            <div class="kl"><div class="km">센서 연결</div><div class="ki" style="background:#eff6ff"><svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div></div>
-            <div class="kv">183</div>
+          <div class="kpi kpi-blue">
+            <div class="kl"><div class="km">센서 연결</div><div class="ki ki-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div></div>
+            <div class="kv kv-c">183</div>
             <div class="ksub">전체의 <span class="up">74.1%</span> 연결됨</div>
           </div>
-          <div class="kpi">
-            <div class="kl"><div class="km">긴급 알림</div><div class="ki" style="background:#fff1f2"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div></div>
-            <div class="kv" style="color:#ef4444">7</div>
-            <div class="ksub"><span class="down">3그루 즉시 조치 필요</span></div>
+          <div class="kpi kpi-err">
+            <div class="kl"><div class="km">긴급 알림</div><div class="ki ki-e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div></div>
+            <div class="kv kv-e">7</div>
+            <div class="ksub"><span class="down">3그루</span> 즉시 조치 필요</div>
           </div>
-          <div class="kpi">
-            <div class="kl"><div class="km">이번 달 점검</div><div class="ki" style="background:#fefce8"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div></div>
-            <div class="kv">24</div>
+          <div class="kpi kpi-warn">
+            <div class="kl"><div class="km">이번 달 점검</div><div class="ki ki-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div></div>
+            <div class="kv kv-w">24</div>
             <div class="ksub">이번 주 <span class="up">8그루</span> 예정</div>
           </div>
         </div>
 
-        <div class="dash-grid">
-          <!-- 건강 분포 -->
+        <!-- 건강 + 알림 -->
+        <div class="dash-row">
           <div class="panel">
             <div class="panel-hd"><h3>건강 등급 분포</h3><span class="ptag">전체 247그루</span></div>
             <div class="health-bars">
-              <div class="hb-item health-A">
-                <div class="hb-label">A (우수)</div>
-                <div class="hb-track"><div class="hb-fill" style="width:54%"></div></div>
-                <div class="hb-num">134</div>
-                <div class="hb-pct">54%</div>
-              </div>
-              <div class="hb-item health-B">
-                <div class="hb-label">B (양호)</div>
-                <div class="hb-track"><div class="hb-fill" style="width:28%"></div></div>
-                <div class="hb-num">68</div>
-                <div class="hb-pct">28%</div>
-              </div>
-              <div class="hb-item health-C">
-                <div class="hb-label">C (주의)</div>
-                <div class="hb-track"><div class="hb-fill" style="width:12%"></div></div>
-                <div class="hb-num">30</div>
-                <div class="hb-pct">12%</div>
-              </div>
-              <div class="hb-item health-D">
-                <div class="hb-label">D (위험)</div>
-                <div class="hb-track"><div class="hb-fill" style="width:6%"></div></div>
-                <div class="hb-num">15</div>
-                <div class="hb-pct">6%</div>
-              </div>
+              <div class="hb-item hA"><div class="hb-label">A (우수)</div><div class="hb-track"><div class="hb-fill" style="width:54%"></div></div><div class="hb-num">134</div><div class="hb-pct">54%</div></div>
+              <div class="hb-item hB"><div class="hb-label">B (양호)</div><div class="hb-track"><div class="hb-fill" style="width:28%"></div></div><div class="hb-num">68</div><div class="hb-pct">28%</div></div>
+              <div class="hb-item hC"><div class="hb-label">C (주의)</div><div class="hb-track"><div class="hb-fill" style="width:12%"></div></div><div class="hb-num">30</div><div class="hb-pct">12%</div></div>
+              <div class="hb-item hD"><div class="hb-label">D (위험)</div><div class="hb-track"><div class="hb-fill" style="width:6%"></div></div><div class="hb-num">15</div><div class="hb-pct">6%</div></div>
             </div>
           </div>
-
-          <!-- 알림 -->
           <div class="panel">
-            <div class="panel-hd"><h3>최근 알림</h3><span class="ptag" style="color:var(--err)">7개 미확인</span></div>
+            <div class="panel-hd"><h3>최근 알림</h3><span class="ptag-live">실시간</span></div>
             <div class="alert-list">
               <div class="al-item" onclick="nav(2)">
-                <div class="al-dot err"></div>
-                <div>
-                  <h5>왕벚나무 #T-047 토양수분 임계</h5>
-                  <p>수분 12% — 정상 범위 (25~70%) 하회</p>
-                </div>
+                <div class="al-dot e"></div>
+                <div><h5>왕벚나무 #T-047 토양수분 임계</h5><p>수분 12% — 정상 범위 하회</p></div>
                 <div class="al-time">8분 전</div>
               </div>
               <div class="al-item" onclick="nav(2)">
-                <div class="al-dot err"></div>
-                <div>
-                  <h5>느티나무 #T-112 병해충 의심</h5>
-                  <p>생체전기 이상 감지 — 나무의사 점검 요망</p>
-                </div>
+                <div class="al-dot e"></div>
+                <div><h5>느티나무 #T-112 병해충 의심</h5><p>생체전기 이상 감지</p></div>
                 <div class="al-time">1시간 전</div>
               </div>
               <div class="al-item">
-                <div class="al-dot warn"></div>
-                <div>
-                  <h5>은행나무 #T-203 EC 수치 경고</h5>
-                  <p>EC 2.8 dS/m — 정상 상한(2.0) 초과</p>
-                </div>
+                <div class="al-dot w"></div>
+                <div><h5>은행나무 #T-203 EC 경고</h5><p>EC 2.8 dS/m — 상한 초과</p></div>
                 <div class="al-time">3시간 전</div>
               </div>
               <div class="al-item">
-                <div class="al-dot info"></div>
-                <div>
-                  <h5>소나무 #T-089 Greehill 스캔 완료</h5>
-                  <p>새 포인트 클라우드 데이터 갱신됨</p>
-                </div>
+                <div class="al-dot i"></div>
+                <div><h5>소나무 #T-089 스캔 완료</h5><p>포인트 클라우드 갱신됨</p></div>
                 <div class="al-time">어제</div>
               </div>
             </div>
@@ -660,178 +734,133 @@
 
         <!-- ESG -->
         <div class="panel">
-          <div class="panel-hd"><h3>ESG 환경 기여도 현황</h3><span class="ptag">Greehill 환경가치 모듈 기준 · 2026년 누적</span></div>
-          <div class="esg-row">
-            <div class="esg-card">
-              <div class="ev">8.4t</div>
-              <div class="ek">CO₂ 흡수량</div>
-              <div class="es">환산 가치 약 168만원</div>
-            </div>
-            <div class="esg-card">
-              <div class="ev">1.2kg</div>
-              <div class="ek">미세먼지 저감</div>
-              <div class="es">PM2.5 기준</div>
-            </div>
-            <div class="esg-card">
-              <div class="ev">₩3.2억</div>
-              <div class="ek">수목 자산 가치</div>
-              <div class="es">247그루 합산</div>
-            </div>
+          <div class="panel-hd"><h3>ESG 환경 기여도</h3><span class="ptag">Greehill 환경가치 모듈 · 2026년 누적</span></div>
+          <div class="esg-grid">
+            <div class="esg-card"><div class="ev">8.4t</div><div class="ek">CO₂ 흡수량</div><div class="es">환산 가치 약 168만원</div></div>
+            <div class="esg-card"><div class="ev">1.2kg</div><div class="ek">미세먼지 저감</div><div class="es">PM2.5 기준</div></div>
+            <div class="esg-card"><div class="ev">₩3.2억</div><div class="ek">수목 자산 가치</div><div class="es">247그루 합산</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── 화면 1: 트리맵 ── -->
+    <!-- ══ 화면 1: 트리맵 ══ -->
     <div class="screen" id="screen1">
       <div class="map-wrap">
-        <!-- 필터 패널 -->
         <div class="map-controls">
-          <div class="ctrl-sec">
-            <h4>수목 검색</h4>
+          <div>
+            <div class="ctrl-h">수목 검색</div>
             <input class="search-inp" type="text" placeholder="수종 또는 번호 검색…">
           </div>
-          <div class="ctrl-sec">
-            <h4>건강 등급 필터</h4>
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <button class="filter-btn on">
-                <div class="filter-dot" style="background:#22c55e"></div>
-                A — 우수
-                <span class="filter-count on">134</span>
-              </button>
-              <button class="filter-btn on">
-                <div class="filter-dot" style="background:#84cc16"></div>
-                B — 양호
-                <span class="filter-count on">68</span>
-              </button>
-              <button class="filter-btn on">
-                <div class="filter-dot" style="background:#f59e0b"></div>
-                C — 주의
-                <span class="filter-count on">30</span>
-              </button>
-              <button class="filter-btn on" style="border-color:var(--err);background:var(--err-l);">
-                <div class="filter-dot" style="background:#ef4444"></div>
-                D — 위험
-                <span class="filter-count" style="color:var(--err)">15</span>
-              </button>
+          <div>
+            <div class="ctrl-h">건강 등급</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <button class="filter-btn on"><div class="filter-dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></div>A — 우수<span class="filter-count g">134</span></button>
+              <button class="filter-btn on"><div class="filter-dot" style="background:#b2ff59"></div>B — 양호<span class="filter-count g">68</span></button>
+              <button class="filter-btn on"><div class="filter-dot" style="background:#ffd740"></div>C — 주의<span class="filter-count" style="color:var(--warn)">30</span></button>
+              <button class="filter-btn on on-err"><div class="filter-dot" style="background:#ff5252;box-shadow:0 0 5px #ff5252"></div>D — 위험<span class="filter-count e">15</span></button>
             </div>
           </div>
-          <div class="divider"></div>
-          <div class="ctrl-sec">
-            <h4>표시 옵션</h4>
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <button class="filter-btn on">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                센서 알림 수목
-                <span class="filter-count on">7</span>
-              </button>
-              <button class="filter-btn">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
-                포인트 클라우드 있음
-                <span class="filter-count">89</span>
-              </button>
+          <div>
+            <div class="ctrl-h">표시 옵션</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <button class="filter-btn on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>센서 알림<span class="filter-count e">7</span></button>
+              <button class="filter-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>포인트 클라우드<span class="filter-count">89</span></button>
             </div>
           </div>
-          <div class="divider"></div>
-          <div class="ctrl-sec">
-            <h4>수종 분류</h4>
+          <div>
+            <div class="ctrl-h">수종 분류</div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <button class="filter-btn">왕벚나무 (42)</button>
-              <button class="filter-btn">느티나무 (38)</button>
-              <button class="filter-btn">은행나무 (31)</button>
-              <button class="filter-btn">소나무 (28)</button>
-              <button class="filter-btn" style="color:var(--ink3)">+ 더보기 (기타 108)</button>
+              <button class="filter-btn">왕벚나무<span class="filter-count">42</span></button>
+              <button class="filter-btn">느티나무<span class="filter-count">38</span></button>
+              <button class="filter-btn">은행나무<span class="filter-count">31</span></button>
+              <button class="filter-btn">소나무<span class="filter-count">28</span></button>
+              <button class="filter-btn" style="color:var(--text3)">+ 기타 108</button>
             </div>
           </div>
         </div>
 
         <!-- 지도 -->
         <div class="map-area">
-          <!-- 배경: 단지 도면 시뮬레이션 -->
           <svg class="map-bg" viewBox="0 0 900 620" preserveAspectRatio="xMidYMid slice">
-            <!-- 도로 -->
-            <rect x="0" y="0" width="900" height="620" fill="#e8efea"/>
+            <rect x="0" y="0" width="900" height="620" fill="#040c07"/>
+            <defs>
+              <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(0,230,118,.04)" stroke-width=".5"/>
+              </pattern>
+            </defs>
             <rect x="0" y="0" width="900" height="620" fill="url(#grid)"/>
             <!-- 도로 -->
-            <rect x="120" y="0" width="28" height="620" fill="#d4dbd6" rx="2"/>
-            <rect x="0" y="180" width="900" height="24" fill="#d4dbd6"/>
-            <rect x="0" y="420" width="900" height="24" fill="#d4dbd6"/>
-            <rect x="580" y="0" width="28" height="620" fill="#d4dbd6"/>
-            <!-- 건물들 -->
-            <rect x="160" y="30" width="120" height="100" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="300" y="30" width="120" height="100" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="440" y="30" width="120" height="100" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="160" y="230" width="120" height="140" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="300" y="230" width="120" height="140" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="440" y="230" width="120" height="140" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="160" y="460" width="120" height="130" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="300" y="460" width="120" height="130" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <rect x="440" y="460" width="120" height="130" fill="#c8d5c8" rx="4" opacity=".8"/>
-            <!-- 우측 공원 영역 -->
-            <rect x="620" y="30" width="260" height="555" fill="#d8e8d8" rx="8" opacity=".7"/>
-            <ellipse cx="750" cy="200" rx="60" ry="50" fill="#c4d8c4" opacity=".5"/>
+            <rect x="118" y="0" width="26" height="620" fill="rgba(0,230,118,.04)" rx="2"/>
+            <rect x="0" y="178" width="900" height="20" fill="rgba(0,230,118,.04)"/>
+            <rect x="0" y="418" width="900" height="20" fill="rgba(0,230,118,.04)"/>
+            <rect x="578" y="0" width="26" height="620" fill="rgba(0,230,118,.04)"/>
+            <!-- 건물 -->
+            <rect x="157" y="28" width="118" height="98" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="298" y="28" width="118" height="98" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="438" y="28" width="118" height="98" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="157" y="228" width="118" height="138" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="298" y="228" width="118" height="138" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="438" y="228" width="118" height="138" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="157" y="458" width="118" height="128" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="298" y="458" width="118" height="128" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <rect x="438" y="458" width="118" height="128" fill="rgba(0,230,118,.05)" stroke="rgba(0,230,118,.12)" stroke-width=".5" rx="3"/>
+            <!-- 공원 -->
+            <rect x="618" y="28" width="258" height="558" fill="rgba(0,230,118,.04)" stroke="rgba(0,230,118,.1)" stroke-width=".5" rx="6"/>
             <!-- 라벨 -->
-            <text x="220" y="85" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">101동</text>
-            <text x="360" y="85" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">102동</text>
-            <text x="500" y="85" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">103동</text>
-            <text x="220" y="302" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">201동</text>
-            <text x="360" y="302" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">202동</text>
-            <text x="500" y="302" text-anchor="middle" fill="#9aaba4" font-size="11" font-family="Pretendard,sans-serif">203동</text>
-            <text x="750" y="330" text-anchor="middle" fill="#8aaa8a" font-size="12" font-family="Pretendard,sans-serif">중앙 조경 공원</text>
-            <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d8e3d8" stroke-width=".3"/></pattern></defs>
+            <text x="216" y="82" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">101동</text>
+            <text x="357" y="82" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">102동</text>
+            <text x="497" y="82" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">103동</text>
+            <text x="216" y="300" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">201동</text>
+            <text x="357" y="300" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">202동</text>
+            <text x="497" y="300" text-anchor="middle" fill="rgba(0,230,118,.25)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">203동</text>
+            <text x="747" y="320" text-anchor="middle" fill="rgba(0,230,118,.3)" font-size="11" font-family="Pretendard,sans-serif" font-weight="800">중앙 조경 공원</text>
           </svg>
 
-          <!-- 수목 마커들 -->
           <div id="markers"></div>
 
-          <!-- 팝업 -->
           <div class="tree-popup" id="treePopup">
             <div class="tp-hd">
               <h4 id="popupTitle">왕벚나무 #T-047</h4>
               <span class="tp-close" onclick="closePopup()">✕</span>
             </div>
-            <div class="tp-row"><span class="tpk">건강 등급</span><span class="tpv"><span id="popupGrade" class="health-grade D">D — 위험</span></span></div>
+            <div class="tp-row"><span class="tpk">건강 등급</span><span class="tpv"><span id="popupGrade" class="hg D">D — 위험</span></span></div>
             <div class="tp-row"><span class="tpk">수고</span><span class="tpv" id="popupH">8.2m</span></div>
             <div class="tp-row"><span class="tpk">흉고직경</span><span class="tpv" id="popupDBH">22cm</span></div>
-            <div class="tp-row"><span class="tpk">센서 상태</span><span class="tpv" id="popupSensor" style="color:var(--err)">⚠ 수분 임계</span></div>
+            <div class="tp-row"><span class="tpk">센서</span><span class="tpv" id="popupSensor" style="color:var(--err)">⚠ 수분 임계</span></div>
             <div class="tp-btns">
               <button class="tp-btn secondary" onclick="nav(3)">3D 보기</button>
               <button class="tp-btn primary" onclick="nav(2)">상세 보기</button>
             </div>
           </div>
 
-          <!-- 범례 -->
           <div class="map-legend">
             <div class="ml-title">건강 등급</div>
-            <div class="ml-row"><div class="ml-dot" style="background:#22c55e"></div>A 우수</div>
-            <div class="ml-row"><div class="ml-dot" style="background:#84cc16"></div>B 양호</div>
-            <div class="ml-row"><div class="ml-dot" style="background:#f59e0b"></div>C 주의</div>
-            <div class="ml-row"><div class="ml-dot" style="background:#ef4444"></div>D 위험</div>
+            <div class="ml-row"><div class="ml-dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></div>A 우수</div>
+            <div class="ml-row"><div class="ml-dot" style="background:#b2ff59"></div>B 양호</div>
+            <div class="ml-row"><div class="ml-dot" style="background:#ffd740"></div>C 주의</div>
+            <div class="ml-row"><div class="ml-dot" style="background:#ff5252;box-shadow:0 0 5px #ff5252"></div>D 위험</div>
           </div>
-
           <div class="tree-count">전체 <strong>247</strong>그루 표시 중</div>
-
           <div class="drag-hint" id="dragHint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><circle cx="12" cy="12" r="3"/></svg>
-            마커를 드래그해 위치를 조정할 수 있습니다
+            마커를 드래그해 위치 조정
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── 화면 2: 수목 상세 ── -->
+    <!-- ══ 화면 2: 수목 상세 ══ -->
     <div class="screen" id="screen2">
       <div class="detail-wrap">
-        <!-- 목록 -->
         <div class="detail-list">
           <div class="dl-search"><input type="text" placeholder="수종 또는 번호…"></div>
           <div id="treeList"></div>
         </div>
-        <!-- 상세 패널 -->
         <div class="detail-panel">
           <div class="dp-hd">
             <div>
-              <h2>왕벚나무 <span style="font-size:14px;color:var(--ink3);font-weight:500">#T-047</span></h2>
+              <h2>왕벚나무 <span>#T-047</span></h2>
               <p>헬리오시티 · 중앙 조경 공원 서측</p>
             </div>
             <div class="dp-actions">
@@ -846,58 +875,45 @@
             </div>
           </div>
 
-          <!-- STI 속성 -->
-          <div class="section-label">Greehill STI 데이터</div>
+          <div class="sec-label">Greehill STI 데이터</div>
           <div class="attr-row">
-            <div class="attr-card"><div class="av">8.2<span style="font-size:12px">m</span></div><div class="ak">수고</div></div>
-            <div class="attr-card"><div class="av">22<span style="font-size:12px">cm</span></div><div class="ak">흉고직경</div></div>
-            <div class="attr-card"><div class="av">14.6<span style="font-size:12px">m²</span></div><div class="ak">수관 면적</div></div>
-            <div class="attr-card"><div class="av"><span class="health-grade D">D</span></div><div class="ak">건강 등급</div></div>
+            <div class="attr-card"><div class="av">8.2<span style="font-size:13px;-webkit-text-fill-color:var(--text3)">m</span></div><div class="ak">수고</div></div>
+            <div class="attr-card"><div class="av">22<span style="font-size:13px;-webkit-text-fill-color:var(--text3)">cm</span></div><div class="ak">흉고직경</div></div>
+            <div class="attr-card"><div class="av">14.6<span style="font-size:11px;-webkit-text-fill-color:var(--text3)">m²</span></div><div class="ak">수관 면적</div></div>
+            <div class="attr-card"><div style="margin-bottom:6px"><span class="hg D">D 위험</span></div><div class="ak">건강 등급</div></div>
           </div>
 
-          <!-- 센서 카드 -->
-          <div class="section-label">실시간 센서 데이터</div>
+          <div class="sec-label">실시간 센서 데이터</div>
           <div class="sensor-grid">
             <div class="sensor-card alert">
-              <div class="sc-top">
-                <div class="sct">토양 수분</div>
-                <div class="sca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>임계</div>
-              </div>
-              <div class="sc-val">12<span class="unit">%</span></div>
-              <div class="sc-range">정상 범위 25 ~ 70%</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill err" style="width:12%"></div></div>
+              <div class="sc-top"><div class="sct">토양 수분</div><div class="sc-alert-tag tag-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>임계</div></div>
+              <div class="sc-val" style="color:var(--err)">12<span class="unit">%</span></div>
+              <div class="sc-range">정상 25 ~ 70%</div>
+              <div class="sc-bar-track"><div class="sc-bar-fill fill-e" style="width:12%"></div></div>
             </div>
             <div class="sensor-card">
-              <div class="sc-top">
-                <div class="sct">토양 온도</div>
-              </div>
-              <div class="sc-val">14.2<span class="unit">°C</span></div>
-              <div class="sc-range">정상 범위 5 ~ 30°C</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill ok" style="width:46%"></div></div>
+              <div class="sc-top"><div class="sct">토양 온도</div></div>
+              <div class="sc-val" style="color:var(--g)">14.2<span class="unit">°C</span></div>
+              <div class="sc-range">정상 5 ~ 30°C</div>
+              <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:46%"></div></div>
             </div>
-            <div class="sensor-card">
-              <div class="sc-top">
-                <div class="sct">전기전도도 (EC)</div>
-                <div class="sca" style="color:var(--warn)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>경고</div>
-              </div>
+            <div class="sensor-card warn">
+              <div class="sc-top"><div class="sct">전기전도도 (EC)</div><div class="sc-alert-tag tag-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>경고</div></div>
               <div class="sc-val" style="color:var(--warn)">2.4<span class="unit">dS/m</span></div>
-              <div class="sc-range">정상 범위 0.5 ~ 2.0 dS/m</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill warn" style="width:80%"></div></div>
+              <div class="sc-range">정상 0.5 ~ 2.0</div>
+              <div class="sc-bar-track"><div class="sc-bar-fill fill-w" style="width:80%"></div></div>
             </div>
             <div class="sensor-card">
-              <div class="sc-top">
-                <div class="sct">생체전기</div>
-              </div>
-              <div class="sc-val">0.82<span class="unit">mV</span></div>
-              <div class="sc-range">정상 범위 0.5 ~ 1.5 mV</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill ok" style="width:55%"></div></div>
+              <div class="sc-top"><div class="sct">생체전기</div></div>
+              <div class="sc-val" style="color:var(--g)">0.82<span class="unit">mV</span></div>
+              <div class="sc-range">정상 0.5 ~ 1.5 mV</div>
+              <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:55%"></div></div>
             </div>
           </div>
 
-          <!-- 7일 차트 -->
           <div class="chart-wrap">
             <div class="chart-hd">
-              <h4>토양 수분 추이</h4>
+              <h4>토양 수분 추이 (7일)</h4>
               <div class="chart-tabs">
                 <button class="chart-tab on">7일</button>
                 <button class="chart-tab">30일</button>
@@ -906,11 +922,10 @@
             <div class="chart-bars" id="moistureChart"></div>
           </div>
 
-          <!-- EMR -->
-          <div class="section-label">진단 이력 (EMR)</div>
+          <div class="sec-label">진단 이력 (EMR)</div>
           <div class="emr-tl">
             <div class="emr-item">
-              <div class="emr-l"><div class="emr-dot" style="border-color:var(--err)"></div><div class="emr-line"></div></div>
+              <div class="emr-l"><div class="emr-dot alert"></div><div class="emr-line"></div></div>
               <div class="emr-c">
                 <div class="et">2026.03.08</div>
                 <h5>토양 건조 긴급 진단</h5>
@@ -930,7 +945,7 @@
               <div class="emr-c">
                 <div class="et">2026.01.10</div>
                 <h5>Greehill 스캔 완료</h5>
-                <p>3D 포인트 클라우드 갱신. 수고 8.2m / 수관 면적 14.6m² / 건강 등급 B 기록.</p>
+                <p>3D 포인트 클라우드 갱신. 수고 8.2m / 수관 14.6m² / 건강 등급 B 기록.</p>
               </div>
             </div>
           </div>
@@ -938,24 +953,24 @@
       </div>
     </div>
 
-    <!-- ── 화면 3: 포인트 클라우드 ── -->
+    <!-- ══ 화면 3: 포인트 클라우드 ══ -->
     <div class="screen" id="screen3">
       <div class="pc-wrap">
         <div class="pc-info">
           <div class="pc-info-hd">
             <h3>왕벚나무 #T-047</h3>
-            <p>포인트 클라우드 뷰어 — Greehill 연동</p>
+            <p>포인트 클라우드 뷰어 — Greehill STI</p>
           </div>
           <div class="pc-attrs">
-            <div class="pca-row"><span class="pk">수종</span><span class="pv">왕벚나무 (Prunus yedoensis)</span></div>
+            <div class="pca-row"><span class="pk">수종</span><span class="pv">왕벚나무</span></div>
             <div class="pca-row"><span class="pk">수고</span><span class="pv">8.2 m</span></div>
             <div class="pca-row"><span class="pk">흉고직경</span><span class="pv">22 cm</span></div>
             <div class="pca-row"><span class="pk">수관 폭</span><span class="pv">4.3 m</span></div>
             <div class="pca-row"><span class="pk">수관 면적</span><span class="pv">14.6 m²</span></div>
             <div class="pca-row"><span class="pk">스캔 날짜</span><span class="pv">2026.01.10</span></div>
-            <div class="pca-row"><span class="pk">포인트 수</span><span class="pv">1,284,730 pts</span></div>
-            <div class="pca-row"><span class="pk">Greehill ID</span><span class="pv" style="font-size:11px;color:var(--ink3)">GH-KR-HEL-0047</span></div>
-            <div class="pca-row"><span class="pk">건강 등급</span><span class="pv"><span class="health-grade D" style="padding:2px 8px;font-size:11px;">D — 위험</span></span></div>
+            <div class="pca-row"><span class="pk">포인트 수</span><span class="pv" style="color:var(--g)">1,284,730 pts</span></div>
+            <div class="pca-row"><span class="pk">Greehill ID</span><span class="pv" style="font-size:11px;color:var(--text3)">GH-KR-HEL-0047</span></div>
+            <div class="pca-row"><span class="pk">건강 등급</span><span class="pv"><span class="hg D">D — 위험</span></span></div>
           </div>
           <div class="pc-actions">
             <button class="pc-btn main" onclick="openGreehill()">
@@ -963,60 +978,52 @@
               Greehill 3D 뷰어 열기
             </button>
             <button class="pc-btn sec">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/></svg>
               .LAS 파일 다운로드
             </button>
           </div>
         </div>
         <div class="pc-main">
-          <div class="pc-preview">
-            <!-- 포인트 클라우드 시뮬레이션 -->
-            <canvas id="pcCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
-            <div class="pc-overlay">
-              <div class="pc-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
-                  <line x1="12" y1="22" x2="12" y2="15.5"/>
-                  <polyline points="22 8.5 12 15.5 2 8.5"/>
-                </svg>
-              </div>
-              <h3>포인트 클라우드 뷰어</h3>
-              <p>Greehill STI 플랫폼에서 왕벚나무 #T-047의<br>1,284,730개 포인트 3D 데이터를 확인하세요.</p>
-              <button class="pc-launch" onclick="openGreehill()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                Greehill에서 3D 보기
-              </button>
+          <canvas id="pcCanvas"></canvas>
+          <div class="pc-overlay">
+            <div class="pc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+                <line x1="12" y1="22" x2="12" y2="15.5"/>
+                <polyline points="22 8.5 12 15.5 2 8.5"/>
+              </svg>
             </div>
-            <div class="pc-badge">Powered by Greehill · ID: GH-KR-HEL-0047</div>
+            <h3>포인트 클라우드 뷰어</h3>
+            <p>Greehill STI에서 왕벚나무 #T-047의<br>1,284,730개 포인트 3D 데이터를 확인하세요.</p>
+            <button class="pc-launch" onclick="openGreehill()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Greehill에서 3D 보기
+            </button>
           </div>
+          <div class="pc-badge">Powered by Greehill · GH-KR-HEL-0047</div>
         </div>
       </div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <script>
-/* ══════════════════════════
-   네비게이션
-══════════════════════════ */
-const titles = ['대시보드','트리맵','수목 상세','포인트 클라우드'];
-const subs   = ['헬리오시티 · 2026년 3월 12일 기준','헬리오시티 · 수목 위치도','헬리오시티 · 왕벚나무 #T-047','왕벚나무 #T-047 · Greehill STI 연동'];
-
-function nav(n) {
-  document.querySelectorAll('.screen').forEach((s,i) => s.classList.toggle('on', i===n));
-  document.querySelectorAll('.ni').forEach((el,i) => el.classList.toggle('on', i===n));
-  document.getElementById('hdrTitle').textContent = titles[n];
-  document.getElementById('hdrSub').textContent   = subs[n];
-  if (n===1) initMarkers();
-  if (n===2) initTreeList();
-  if (n===3) initPointCloud();
+/* ── 네비게이션 ── */
+const titles=['대시보드','트리맵','수목 상세','포인트 클라우드'];
+const subs=['헬리오시티 · 2026년 3월 12일 기준','헬리오시티 · 수목 위치도','헬리오시티 · 왕벚나무 #T-047','왕벚나무 #T-047 · Greehill STI 연동'];
+function nav(n){
+  document.querySelectorAll('.screen').forEach((s,i)=>s.classList.toggle('on',i===n));
+  document.querySelectorAll('.ni').forEach((el,i)=>el.classList.toggle('on',i===n));
+  document.getElementById('hdrTitle').textContent=titles[n];
+  document.getElementById('hdrSub').textContent=subs[n];
+  if(n===1)initMarkers();
+  if(n===2)initTreeList();
+  if(n===3)initPointCloud();
 }
 
-/* ══════════════════════════
-   트리맵 마커
-══════════════════════════ */
-const TREES = [
+/* ── 트리맵 마커 ── */
+const TREES=[
   {id:'T-047',sp:'왕벚나무',g:'D',h:'8.2m',dbh:'22cm',sens:'⚠ 수분 임계',x:67,y:52},
   {id:'T-089',sp:'소나무',g:'A',h:'6.8m',dbh:'18cm',sens:'정상',x:72,y:62},
   {id:'T-112',sp:'느티나무',g:'D',h:'11.4m',dbh:'35cm',sens:'⚠ 생체전기',x:78,y:43},
@@ -1032,175 +1039,131 @@ const TREES = [
   {id:'T-229',sp:'왕벚나무',g:'A',h:'7.8m',dbh:'22cm',sens:'정상',x:50,y:78},
   {id:'T-241',sp:'소나무',g:'B',h:'5.5m',dbh:'14cm',sens:'정상',x:65,y:82},
 ];
-
-let markersInit = false;
-function initMarkers() {
-  if (markersInit) return; markersInit = true;
-  const wrap = document.getElementById('markers');
-  const area = wrap.parentElement;
-  const w = area.clientWidth;
-  const h = area.clientHeight;
-
-  TREES.forEach(t => {
-    const el = document.createElement('div');
-    el.className = `tree-marker ${t.g}`;
-    el.style.left = t.x + '%';
-    el.style.top  = t.y + '%';
-    el.title = t.sp + ' ' + t.id;
-    el.onclick = () => showPopup(el, t);
-
-    // 드래그
-    let dragging=false,ox,oy;
-    el.addEventListener('mousedown', e => {
-      dragging=true; ox=e.clientX-el.getBoundingClientRect().left; oy=e.clientY-el.getBoundingClientRect().top;
-      el.style.transition='none'; e.preventDefault();
+let markersInit=false;
+function initMarkers(){
+  if(markersInit)return;markersInit=true;
+  const wrap=document.getElementById('markers');
+  const area=wrap.parentElement;
+  TREES.forEach(t=>{
+    const el=document.createElement('div');
+    el.className=`tree-marker ${t.g}`;
+    el.style.left=t.x+'%';el.style.top=t.y+'%';
+    el.onclick=()=>showPopup(el,t);
+    let dragging=false;
+    el.addEventListener('mousedown',e=>{dragging=true;el.style.transition='none';e.preventDefault();});
+    document.addEventListener('mousemove',e=>{
+      if(!dragging)return;
+      const r=area.getBoundingClientRect();
+      el.style.left=((e.clientX-r.left)/r.width*100).toFixed(1)+'%';
+      el.style.top=((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
     });
-    document.addEventListener('mousemove', e => {
-      if (!dragging) return;
-      const r = area.getBoundingClientRect();
-      const nx = ((e.clientX-r.left)/r.width*100).toFixed(1);
-      const ny = ((e.clientY-r.top)/r.height*100).toFixed(1);
-      el.style.left=nx+'%'; el.style.top=ny+'%';
-    });
-    document.addEventListener('mouseup', () => {
-      if (dragging) { dragging=false; el.style.transition=''; }
-    });
-
+    document.addEventListener('mouseup',()=>{if(dragging){dragging=false;el.style.transition=''}});
     wrap.appendChild(el);
   });
-  setTimeout(() => {
-    const h = document.getElementById('dragHint');
-    if(h) { h.style.opacity='0'; setTimeout(()=>h.style.display='none',500); }
-  }, 3000);
+  setTimeout(()=>{const h=document.getElementById('dragHint');if(h){h.style.opacity='0';setTimeout(()=>h.style.display='none',400);}},3000);
 }
-
-function showPopup(el, t) {
-  const popup = document.getElementById('treePopup');
+function showPopup(el,t){
+  const popup=document.getElementById('treePopup');
   document.querySelectorAll('.tree-marker').forEach(m=>m.classList.remove('sel'));
   el.classList.add('sel');
-
-  const area = el.parentElement.parentElement;
-  const ar = area.getBoundingClientRect();
-  const er = el.getBoundingClientRect();
-  let px = er.left - ar.left + 20;
-  let py = er.top  - ar.top  - 10;
-  if (px + 200 > ar.width) px -= 220;
-  if (py + 180 > ar.height) py -= 180;
-
-  popup.style.left = px + 'px'; popup.style.top = py + 'px';
-  document.getElementById('popupTitle').textContent = t.sp + ' #' + t.id;
-  document.getElementById('popupH').textContent = t.h;
-  document.getElementById('popupDBH').textContent = t.dbh;
-  document.getElementById('popupSensor').textContent = t.sens;
-  document.getElementById('popupSensor').style.color = t.sens.includes('⚠')?'var(--err)':'var(--g)';
-
-  const gradeEl = document.getElementById('popupGrade');
-  gradeEl.className = 'health-grade ' + t.g;
-  const labels = {A:'A — 우수',B:'B — 양호',C:'C — 주의',D:'D — 위험'};
-  gradeEl.textContent = labels[t.g];
-
+  const area=el.parentElement.parentElement;
+  const ar=area.getBoundingClientRect();const er=el.getBoundingClientRect();
+  let px=er.left-ar.left+24,py=er.top-ar.top-10;
+  if(px+210>ar.width)px-=230;if(py+200>ar.height)py-=200;
+  popup.style.left=px+'px';popup.style.top=py+'px';
+  document.getElementById('popupTitle').textContent=t.sp+' #'+t.id;
+  document.getElementById('popupH').textContent=t.h;
+  document.getElementById('popupDBH').textContent=t.dbh;
+  const si=document.getElementById('popupSensor');
+  si.textContent=t.sens;si.style.color=t.sens.includes('⚠')?'var(--err)':'var(--g)';
+  const ge=document.getElementById('popupGrade');
+  ge.className='hg '+t.g;
+  const gl={A:'A — 우수',B:'B — 양호',C:'C — 주의',D:'D — 위험'};
+  ge.textContent=gl[t.g];
   popup.classList.add('vis');
 }
-
-function closePopup() {
+function closePopup(){
   document.getElementById('treePopup').classList.remove('vis');
   document.querySelectorAll('.tree-marker').forEach(m=>m.classList.remove('sel'));
 }
 
-/* ══════════════════════════
-   수목 목록
-══════════════════════════ */
-function initTreeList() {
-  const el = document.getElementById('treeList');
-  if (el.children.length > 0) return;
-  TREES.forEach((t, i) => {
-    const d = document.createElement('div');
-    d.className = 'tl-item' + (i===0?' on':'');
-    d.innerHTML = `
-      <div class="tl-badge ${t.g}">${t.g}</div>
-      <div class="tl-info">
-        <h5>${t.sp}</h5>
-        <p>#${t.id} · ${t.h}</p>
-      </div>
-      ${t.sens.includes('⚠') ? `<div class="tl-alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>` : ''}
-    `;
-    d.onclick = () => {
-      document.querySelectorAll('.tl-item').forEach(e=>e.classList.remove('on'));
-      d.classList.add('on');
-    };
+/* ── 수목 목록 ── */
+function initTreeList(){
+  const el=document.getElementById('treeList');
+  if(el.children.length>0)return;
+  TREES.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='tl-item'+(i===0?' on':'');
+    d.innerHTML=`<div class="tl-badge ${t.g}">${t.g}</div><div class="tl-info"><h5>${t.sp}</h5><p>#${t.id} · ${t.h}</p></div>${t.sens.includes('⚠')?`<div class="tl-alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>`:''}`;
+    d.onclick=()=>{document.querySelectorAll('.tl-item').forEach(e=>e.classList.remove('on'));d.classList.add('on');};
     el.appendChild(d);
   });
 }
 
-/* ══════════════════════════
-   수분 차트
-══════════════════════════ */
-const moistureData = [42,38,31,28,22,17,12];
-const days = ['3/6','3/7','3/8','3/9','3/10','3/11','3/12'];
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const wrap = document.getElementById('moistureChart');
-    if (!wrap) return;
-    moistureData.forEach((v,i) => {
-      const col = document.createElement('div'); col.className='chart-col';
-      const bar = document.createElement('div');
-      bar.className = 'chart-bar' + (i===6?' hl':'');
-      bar.style.height = (v/80*100) + '%';
-      bar.style.background = v < 25 ? (v<15?'var(--err)':'var(--warn)') : 'var(--g-l)';
-      const lbl = document.createElement('div'); lbl.className='chart-lbl'; lbl.textContent=days[i];
-      const val = document.createElement('div'); val.className='chart-val'; val.textContent=v+'%';
-      col.appendChild(val); col.appendChild(bar); col.appendChild(lbl);
+/* ── 수분 차트 ── */
+const moistureData=[42,38,31,28,22,17,12];
+const days=['3/6','3/7','3/8','3/9','3/10','3/11','3/12'];
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const wrap=document.getElementById('moistureChart');
+    if(!wrap)return;
+    moistureData.forEach((v,i)=>{
+      const col=document.createElement('div');col.className='chart-col';
+      const bar=document.createElement('div');
+      const cls=v>=30?'hl':v>=20?'med':'low';
+      bar.className='chart-bar '+cls;
+      bar.style.height=(v/60*100)+'%';
+      const lbl=document.createElement('div');lbl.className='chart-lbl';lbl.textContent=days[i];
+      const val=document.createElement('div');val.className='chart-val';val.textContent=v+'%';
+      col.appendChild(val);col.appendChild(bar);col.appendChild(lbl);
       wrap.appendChild(col);
     });
-  }, 100);
+  },100);
 });
 
-/* ══════════════════════════
-   포인트 클라우드 캔버스
-══════════════════════════ */
-function initPointCloud() {
-  const canvas = document.getElementById('pcCanvas');
-  if (!canvas || canvas._init) return;
-  canvas._init = true;
-  const ctx = canvas.getContext('2d');
-  function resize() { canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight; }
-  resize(); window.addEventListener('resize', resize);
-
-  const pts = [];
-  for(let i=0; i<2000; i++) {
-    const r=Math.random(), theta=Math.random()*Math.PI*2;
-    const rho=Math.random();
-    // 나무 형태 시뮬레이션
-    const layer = Math.random();
-    let px, py;
-    if (layer < .3) { // 줄기
-      px = canvas.width/2 + (Math.random()-.5)*20;
-      py = canvas.height * (.3 + Math.random()*.5);
-    } else { // 수관
-      const spread = Math.min(canvas.width,canvas.height)*.25;
-      px = canvas.width/2 + (Math.random()-.5)*spread*2;
-      py = canvas.height * .2 + Math.random() * canvas.height * .45;
-    }
-    const g = Math.floor(80 + Math.random()*80);
-    const b = Math.floor(30 + Math.random()*60);
-    pts.push({x:px,y:py,r:1+Math.random(),c:`rgba(${Math.floor(g*.3)},${g},${b},${.4+Math.random()*.4})`});
+/* ── 포인트 클라우드 캔버스 ── */
+function initPointCloud(){
+  const canvas=document.getElementById('pcCanvas');
+  if(!canvas||canvas._init)return;
+  canvas._init=true;
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const pts=[];
+  for(let i=0;i<2400;i++){
+    const layer=Math.random();
+    let px,py;
+    if(layer<.25){px=canvas.width/2+(Math.random()-.5)*18;py=canvas.height*(.3+Math.random()*.5);}
+    else{const sp=Math.min(canvas.width,canvas.height)*.28;px=canvas.width/2+(Math.random()-.5)*sp*2;py=canvas.height*.15+Math.random()*canvas.height*.5;}
+    const brightness=0.3+Math.random()*0.7;
+    const isG=Math.random()>.3;
+    pts.push({
+      ox:px/600,oy:py/500,
+      r:.8+Math.random()*1.2,
+      c:isG?`rgba(0,${Math.floor(180+brightness*75)},${Math.floor(brightness*80)},${0.4+Math.random()*.45})`
+          :`rgba(0,${Math.floor(200+brightness*55)},${Math.floor(180+brightness*75)},${0.3+Math.random()*.35})`
+    });
   }
-
-  function draw() {
-    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pts.forEach(p => {
+  let angle=0;
+  function draw(){
+    canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;
+    ctx.fillStyle='rgba(2,8,5,1)';ctx.fillRect(0,0,canvas.width,canvas.height);
+    angle+=.002;
+    const cx=canvas.width/2,cy=canvas.height/2;
+    pts.forEach(p=>{
+      const nx=(p.ox-.5)*Math.cos(angle)-(p.oy-.5)*Math.sin(angle)+.5;
+      const ny=(p.ox-.5)*Math.sin(angle)+(p.oy-.5)*Math.cos(angle)+.5;
       ctx.beginPath();
-      ctx.arc(p.x/600*canvas.width, p.y/500*canvas.height, p.r, 0, Math.PI*2);
-      ctx.fillStyle=p.c; ctx.fill();
+      ctx.arc(nx*canvas.width,ny*canvas.height,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c;ctx.fill();
     });
     requestAnimationFrame(draw);
   }
   draw();
 }
 
-function openGreehill() {
-  alert('Greehill Trees 플랫폼으로 이동합니다.\n(실제 서비스에서는 https://app.greehill.com/trees/GH-KR-HEL-0047 로 연결됩니다)');
+function openGreehill(){
+  alert('Greehill Trees 플랫폼으로 이동합니다.\n(https://app.greehill.com/trees/GH-KR-HEL-0047)');
 }
 </script>
 </body>
