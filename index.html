@@ -492,7 +492,7 @@
   .tl-alert svg { width: 13px; height: 13px; color: var(--err); }
 
   /* 상세 패널 */
-  .detail-panel { flex: 1; overflow-y: auto; padding: 24px 28px; }
+  .detail-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .dp-hd { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
   .dp-hd h2 { font-size: 22px; font-weight: 900; letter-spacing: -.5px; color: var(--text); margin-bottom: 4px; }
   .dp-hd h2 span { font-size: 14px; font-weight: 500; color: var(--text3); }
@@ -905,6 +905,112 @@
   .toast.warn-t svg { color: var(--warn); }
   .toast.err-t svg { color: #fca5a5; }
 
+  /* ═══════════════════════════════════
+     수목 상세 — 탭 UI
+  ═══════════════════════════════════ */
+  .dp-hd-wrap { padding: 20px 24px 0; flex-shrink: 0; }
+  .dp-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    padding: 0 24px; flex-shrink: 0; background: var(--surface);
+  }
+  .dp-tab {
+    padding: 11px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+    border-bottom: 2.5px solid transparent; color: var(--text3); transition: all .13s;
+    white-space: nowrap;
+  }
+  .dp-tab.on { color: var(--green-700); border-bottom-color: var(--green-600); }
+  .dp-tab:hover:not(.on) { color: var(--text2); }
+  .dp-tab-content { display: none; overflow-y: auto; flex: 1; padding: 20px 24px; }
+  .dp-tab-content.on { display: block; }
+
+  /* ═══ 처방 이력 카드 ═══ */
+  .rx-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px;
+    transition: box-shadow .12s;
+  }
+  .rx-card:hover { box-shadow: var(--shadow); }
+  .rx-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .rx-date { font-size: 11.5px; color: var(--text3); margin-left: auto; }
+  .rx-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+  .rx-body { font-size: 12.5px; color: var(--text2); line-height: 1.7; margin-bottom: 9px; }
+  .rx-doctor { font-size: 12px; color: var(--green-600); font-weight: 700; margin-top: 6px; }
+  .rx-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+  }
+  .rx-tag.water { background: #e0f2fe; color: #0284c7; }
+  .rx-tag.fert  { background: var(--green-100); color: var(--green-700); }
+  .rx-tag.pest  { background: var(--warn-l); color: var(--warn); }
+  .rx-tag.prune { background: var(--surface3); color: var(--text2); }
+
+  /* ═══ 사진 갤러리 ═══ */
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .photo-card {
+    border-radius: 10px; overflow: hidden; aspect-ratio: 4/3;
+    background: var(--surface3); border: 1px solid var(--border);
+    cursor: pointer; position: relative; transition: all .13s;
+  }
+  .photo-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+  .photo-ph {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; gap: 5px; color: var(--text3);
+  }
+  .photo-ph svg { width: 20px; height: 20px; }
+  .photo-ph span { font-size: 10.5px; font-weight: 600; }
+  .photo-meta { font-size: 11px; color: var(--text3); text-align: center; }
+  .photo-upload {
+    border: 1.5px dashed var(--border-g); border-radius: 10px; padding: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; color: var(--green-600); font-size: 12.5px; font-weight: 700;
+    transition: all .13s; background: var(--green-50); margin-top: 4px;
+  }
+  .photo-upload:hover { background: var(--green-100); }
+  .photo-upload svg { width: 16px; height: 16px; }
+
+  /* ═══ 추가 정보 인포 박스 ═══ */
+  .ibox {
+    background: var(--green-50); border: 1px solid var(--border-g);
+    border-radius: var(--radius-sm); padding: 12px 14px; font-size: 12.5px;
+    color: var(--text2); line-height: 1.7; margin-bottom: 14px;
+  }
+  .ibox strong { color: var(--green-700); }
+
+  /* ═══ 지도 줌 컨트롤 ═══ */
+  .map-zoom {
+    position: absolute; right: 14px; bottom: 52px;
+    display: flex; flex-direction: column; gap: 3px; z-index: 10;
+  }
+  .mz-btn {
+    width: 32px; height: 32px; border-radius: 7px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); font-size: 17px; line-height: 1;
+    transition: all .12s; font-weight: 400;
+  }
+  .mz-btn:hover { background: var(--surface); color: var(--green-700); border-color: var(--border-g); }
+  .mz-sep { width: 22px; height: 1px; background: var(--border); margin: 2px auto; }
+
+  /* 하이라이트 마커 */
+  .tree-marker.hl { box-shadow: 0 0 0 4px rgba(255,200,0,.55), 0 0 0 8px rgba(255,200,0,.2); animation: hl-pulse 1.2s ease-in-out infinite; z-index: 20 !important; }
+  @keyframes hl-pulse { 0%,100%{ transform:translate(-50%,-50%) scale(1); } 50%{ transform:translate(-50%,-50%) scale(1.3); } }
+
+  /* ═══ 트리맵 팝업 개선 ═══ */
+  .tp-divider { height: 1px; background: var(--border2); margin: 8px 0; }
+  .tp-extra { font-size: 11px; color: var(--text3); padding: 2px 0; }
+
+  /* ═══ 수목 상세 개요 카드 ═══ */
+  .dp-overview {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;
+  }
+  .dpo-card {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 12px 14px; text-align: center;
+  }
+  .dpo-val { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 3px; }
+  .dpo-key { font-size: 11px; color: var(--text3); font-weight: 600; }
+
   /* 삭제 확인 모달 */
   .del-confirm { text-align: center; padding: 8px 0; }
   .del-confirm h4 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
@@ -1127,15 +1233,15 @@
         <div class="map-controls">
           <div>
             <div class="ctrl-h">수목 검색</div>
-            <input class="search-inp" type="text" placeholder="수종 또는 번호 검색…">
+            <input class="search-inp" type="text" placeholder="수종 또는 번호 검색…" oninput="mapSearch(this.value)">
           </div>
           <div>
             <div class="ctrl-h">건강 등급</div>
             <div style="display:flex;flex-direction:column;gap:5px;">
-              <button class="filter-btn on"><div class="filter-dot" style="background:var(--green-500)"></div>A — 우수<span class="filter-count g">134</span></button>
-              <button class="filter-btn on"><div class="filter-dot" style="background:#84cc16"></div>B — 양호<span class="filter-count g">68</span></button>
-              <button class="filter-btn on"><div class="filter-dot" style="background:var(--warn)"></div>C — 주의<span class="filter-count" style="color:var(--warn)">30</span></button>
-              <button class="filter-btn on on-err"><div class="filter-dot" style="background:var(--err)"></div>D — 위험<span class="filter-count e">15</span></button>
+              <button class="filter-btn on" onclick="toggleGradeFilter('A',this)"><div class="filter-dot" style="background:var(--green-500)"></div>A — 우수<span class="filter-count g">134</span></button>
+              <button class="filter-btn on" onclick="toggleGradeFilter('B',this)"><div class="filter-dot" style="background:#84cc16"></div>B — 양호<span class="filter-count g">68</span></button>
+              <button class="filter-btn on" onclick="toggleGradeFilter('C',this)"><div class="filter-dot" style="background:var(--warn)"></div>C — 주의<span class="filter-count" style="color:var(--warn)">30</span></button>
+              <button class="filter-btn on on-err" onclick="toggleGradeFilter('D',this)"><div class="filter-dot" style="background:var(--err)"></div>D — 위험<span class="filter-count e">15</span></button>
             </div>
           </div>
           <div>
@@ -1228,6 +1334,14 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><circle cx="12" cy="12" r="3"/></svg>
             마커를 드래그해 위치 조정
           </div>
+
+          <!-- 줌 컨트롤 -->
+          <div class="map-zoom">
+            <button class="mz-btn" onclick="mapZoom(1.2)" title="확대">+</button>
+            <div class="mz-sep"></div>
+            <button class="mz-btn" onclick="mapZoom(0.833)" title="축소">−</button>
+            <button class="mz-btn" onclick="mapZoomReset()" title="초기화" style="font-size:10px;font-weight:700;">↺</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1240,101 +1354,234 @@
           <div id="treeList"></div>
         </div>
         <div class="detail-panel">
-          <div class="dp-hd">
-            <div>
-              <h2>왕벚나무 <span>#T-047</span></h2>
-              <p>헬리오시티 · 중앙 조경 공원 서측</p>
-            </div>
-            <div class="dp-actions">
-              <button class="dp-act cloud" onclick="nav(3)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
-                포인트 클라우드
-              </button>
-              <button class="dp-act primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                점검 등록
-              </button>
-            </div>
-          </div>
-
-          <div class="sec-label">Greehill STI 데이터</div>
-          <div class="attr-row">
-            <div class="attr-card"><div class="av">8.2<span style="font-size:13px;color:var(--text3)">m</span></div><div class="ak">수고</div></div>
-            <div class="attr-card"><div class="av">22<span style="font-size:13px;color:var(--text3)">cm</span></div><div class="ak">흉고직경</div></div>
-            <div class="attr-card"><div class="av">14.6<span style="font-size:11px;color:var(--text3)">m²</span></div><div class="ak">수관 면적</div></div>
-            <div class="attr-card"><div style="margin-bottom:6px"><span class="hg D">D 위험</span></div><div class="ak">건강 등급</div></div>
-          </div>
-
-          <div class="sec-label">실시간 센서 데이터</div>
-          <div class="sensor-grid">
-            <div class="sensor-card alert">
-              <div class="sc-top"><div class="sct">토양 수분</div><div class="sc-alert-tag tag-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>임계</div></div>
-              <div class="sc-val" style="color:var(--err)">12<span class="unit">%</span></div>
-              <div class="sc-range">정상 25 ~ 70%</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill fill-e" style="width:12%"></div></div>
-            </div>
-            <div class="sensor-card">
-              <div class="sc-top"><div class="sct">토양 온도</div></div>
-              <div class="sc-val">14.2<span class="unit">°C</span></div>
-              <div class="sc-range">정상 5 ~ 30°C</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:46%"></div></div>
-            </div>
-            <div class="sensor-card warn">
-              <div class="sc-top"><div class="sct">전기전도도 (EC)</div><div class="sc-alert-tag tag-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>경고</div></div>
-              <div class="sc-val" style="color:var(--warn)">2.4<span class="unit">dS/m</span></div>
-              <div class="sc-range">정상 0.5 ~ 2.0</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill fill-w" style="width:80%"></div></div>
-            </div>
-            <div class="sensor-card">
-              <div class="sc-top"><div class="sct">생체전기</div></div>
-              <div class="sc-val">0.82<span class="unit">mV</span></div>
-              <div class="sc-range">정상 0.5 ~ 1.5 mV</div>
-              <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:55%"></div></div>
-            </div>
-          </div>
-
-          <div class="chart-wrap">
-            <div class="chart-hd">
-              <h4>토양 수분 추이 (7일)</h4>
-              <div class="chart-tabs">
-                <button class="chart-tab on">7일</button>
-                <button class="chart-tab">30일</button>
+          <!-- ── 헤더 ── -->
+          <div class="dp-hd-wrap">
+            <div class="dp-hd">
+              <div>
+                <h2>왕벚나무 <span>#T-047</span></h2>
+                <p>헬리오시티 · 중앙 조경 공원 서측 · 수령 약 23년</p>
               </div>
-            </div>
-            <div class="chart-bars" id="moistureChart"></div>
-          </div>
-
-          <div class="sec-label">진단 이력 (EMR)</div>
-          <div class="emr-tl">
-            <div class="emr-item">
-              <div class="emr-l"><div class="emr-dot alert"></div><div class="emr-line"></div></div>
-              <div class="emr-c">
-                <div class="et">2026.03.08</div>
-                <h5>토양 건조 긴급 진단</h5>
-                <p>나무의사 방문. 수분 공급 불균형 확인. 배수층 막힘 의심. 관수 시스템 점검 의뢰.</p>
-              </div>
-            </div>
-            <div class="emr-item">
-              <div class="emr-l"><div class="emr-dot"></div><div class="emr-line"></div></div>
-              <div class="emr-c">
-                <div class="et">2026.02.15</div>
-                <h5>정기 건강 진단</h5>
-                <p>전반적 양호. EC 수치 경미한 상승 관찰. 2주 후 재측정 권고.</p>
-              </div>
-            </div>
-            <div class="emr-item">
-              <div class="emr-l"><div class="emr-dot"></div></div>
-              <div class="emr-c">
-                <div class="et">2026.01.10</div>
-                <h5>Greehill 스캔 완료</h5>
-                <p>3D 포인트 클라우드 갱신. 수고 8.2m / 수관 14.6m² / 건강 등급 B 기록.</p>
+              <div class="dp-actions">
+                <button class="dp-act secondary" onclick="nav(1)" title="트리맵에서 보기">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                  트리맵
+                </button>
+                <button class="dp-act cloud" onclick="nav(3)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                  3D 보기
+                </button>
+                <button class="dp-act secondary" onclick="openEditModal('T-047','왕벚나무',8.2,22,'D')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  수정
+                </button>
+                <button class="dp-act primary" onclick="openInspectModal('왕벚나무','T-047')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                  점검 등록
+                </button>
               </div>
             </div>
           </div>
+
+          <!-- ── 탭 바 ── -->
+          <div class="dp-tabs">
+            <div class="dp-tab on" onclick="switchDpTab(0)">기본 정보</div>
+            <div class="dp-tab" onclick="switchDpTab(1)">진단 이력 (EMR)</div>
+            <div class="dp-tab" onclick="switchDpTab(2)">처방 이력</div>
+            <div class="dp-tab" onclick="switchDpTab(3)">사진</div>
+          </div>
+
+          <!-- ═══════ 탭 0: 기본 정보 ═══════ -->
+          <div class="dp-tab-content on" id="dptab0">
+            <div class="dp-overview">
+              <div class="dpo-card">
+                <div class="dpo-val">23년</div>
+                <div class="dpo-key">추정 수령</div>
+              </div>
+              <div class="dpo-card">
+                <div class="dpo-val" style="font-size:14px;color:var(--text3)">37.55°N</div>
+                <div class="dpo-key">GPS 위치</div>
+              </div>
+              <div class="dpo-card">
+                <div class="dpo-val" style="font-size:13px;color:var(--green-600)">GH-0047</div>
+                <div class="dpo-key">Greehill ID</div>
+              </div>
+            </div>
+
+            <div class="sec-label">Greehill STI 데이터</div>
+            <div class="attr-row">
+              <div class="attr-card"><div class="av">8.2<span style="font-size:13px;color:var(--text3)">m</span></div><div class="ak">수고</div></div>
+              <div class="attr-card"><div class="av">22<span style="font-size:13px;color:var(--text3)">cm</span></div><div class="ak">흉고직경</div></div>
+              <div class="attr-card"><div class="av">14.6<span style="font-size:11px;color:var(--text3)">m²</span></div><div class="ak">수관 면적</div></div>
+              <div class="attr-card"><div style="margin-bottom:6px"><span class="hg D">D 위험</span></div><div class="ak">건강 등급</div></div>
+            </div>
+
+            <div class="sec-label">실시간 센서 데이터</div>
+            <div class="sensor-grid">
+              <div class="sensor-card alert">
+                <div class="sc-top"><div class="sct">토양 수분</div><div class="sc-alert-tag tag-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>임계</div></div>
+                <div class="sc-val" style="color:var(--err)">12<span class="unit">%</span></div>
+                <div class="sc-range">정상 25 ~ 70%</div>
+                <div class="sc-bar-track"><div class="sc-bar-fill fill-e" style="width:12%"></div></div>
+              </div>
+              <div class="sensor-card">
+                <div class="sc-top"><div class="sct">토양 온도</div></div>
+                <div class="sc-val">14.2<span class="unit">°C</span></div>
+                <div class="sc-range">정상 5 ~ 30°C</div>
+                <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:46%"></div></div>
+              </div>
+              <div class="sensor-card warn">
+                <div class="sc-top"><div class="sct">전기전도도 (EC)</div><div class="sc-alert-tag tag-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>경고</div></div>
+                <div class="sc-val" style="color:var(--warn)">2.4<span class="unit">dS/m</span></div>
+                <div class="sc-range">정상 0.5 ~ 2.0</div>
+                <div class="sc-bar-track"><div class="sc-bar-fill fill-w" style="width:80%"></div></div>
+              </div>
+              <div class="sensor-card">
+                <div class="sc-top"><div class="sct">생체전기</div></div>
+                <div class="sc-val">0.82<span class="unit">mV</span></div>
+                <div class="sc-range">정상 0.5 ~ 1.5 mV</div>
+                <div class="sc-bar-track"><div class="sc-bar-fill fill-g" style="width:55%"></div></div>
+              </div>
+            </div>
+
+            <div class="chart-wrap">
+              <div class="chart-hd">
+                <h4 id="chartTitle">토양 수분 추이 (7일)</h4>
+                <div class="chart-tabs">
+                  <button class="chart-tab on" onclick="switchChart('7d',this)">7일</button>
+                  <button class="chart-tab" onclick="switchChart('30d',this)">30일</button>
+                  <button class="chart-tab" onclick="switchChart('90d',this)">90일</button>
+                </div>
+              </div>
+              <div class="chart-bars" id="moistureChart"></div>
+            </div>
+          </div>
+
+          <!-- ═══════ 탭 1: 진단 이력 ═══════ -->
+          <div class="dp-tab-content" id="dptab1">
+            <div class="ibox">
+              총 <strong>6건</strong>의 진단 이력 · 마지막 진단 <strong>2026.03.08</strong> · 나무의사 <strong>박재원</strong>
+            </div>
+            <div class="emr-tl">
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot alert"></div><div class="emr-line"></div></div>
+                <div class="emr-c">
+                  <div class="et">2026.03.08</div>
+                  <h5>🚨 토양 건조 긴급 진단</h5>
+                  <p>나무의사 박재원 방문. 수분 공급 불균형 확인. 배수층 막힘 의심. 관수 시스템 점검 의뢰. 건강 등급 C→D 하향 조정.</p>
+                </div>
+              </div>
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot"></div><div class="emr-line"></div></div>
+                <div class="emr-c">
+                  <div class="et">2026.02.15</div>
+                  <h5>정기 건강 진단</h5>
+                  <p>전반적 양호. EC 수치 경미한 상승 관찰. 2주 후 재측정 권고. 건강 등급 B 유지.</p>
+                </div>
+              </div>
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot"></div><div class="emr-line"></div></div>
+                <div class="emr-c">
+                  <div class="et">2026.01.10</div>
+                  <h5>Greehill 3D 스캔 완료</h5>
+                  <p>LiDAR 포인트 클라우드 갱신 (1,284,730 pts). 수고 8.2m / 수관 14.6m² / 건강 등급 B 기록. 이전 스캔 대비 수관 면적 +0.4m² 증가.</p>
+                </div>
+              </div>
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot"></div><div class="emr-line"></div></div>
+                <div class="emr-c">
+                  <div class="et">2025.11.20</div>
+                  <h5>가을 정기 점검</h5>
+                  <p>단풍 착색 정상. 낙엽 전 수관 조사 완료. EC 0.8 dS/m 정상 범위. 월동 준비 점검 실시.</p>
+                </div>
+              </div>
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot"></div><div class="emr-line"></div></div>
+                <div class="emr-c">
+                  <div class="et">2025.08.10</div>
+                  <h5>병해충 예방 점검</h5>
+                  <p>복숭아유리나방 예방 약제 도포. 지제부 유인목 설치. 토양 수분 52% — 정상. 건강 등급 A 유지.</p>
+                </div>
+              </div>
+              <div class="emr-item">
+                <div class="emr-l"><div class="emr-dot"></div></div>
+                <div class="emr-c">
+                  <div class="et">2025.03.15</div>
+                  <h5>봄 개화 전 점검</h5>
+                  <p>동해 피해 없음. 수간 상태 양호. 개화 예상 3월 말. 초기 생육 상태 A등급 판정.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════ 탭 2: 처방 이력 ═══════ -->
+          <div class="dp-tab-content" id="dptab2">
+            <div class="ibox">
+              총 <strong>4건</strong>의 처방 이력 · 현재 진행 중인 처방 <strong>1건</strong>
+            </div>
+            <div class="rx-card">
+              <div class="rx-hd">
+                <span class="rx-tag water">관수</span>
+                <span class="rx-tag fert">토양개량</span>
+                <span class="rx-date">2026.03.08</span>
+              </div>
+              <div class="rx-title">긴급 관수 처방 — 진행 중</div>
+              <div class="rx-body">토양 수분 12%로 임계 이하 확인. 관수 시스템 밸브 점검 후 일일 1회 강제 관수 실시. 배수층 막힘으로 인한 가뭄 스트레스 예방을 위해 3주간 집중 관리. 차기 점검일 2026.03.29.</div>
+              <div class="rx-doctor">담당 나무의사: 박재원 (세이브트리)</div>
+            </div>
+            <div class="rx-card">
+              <div class="rx-hd">
+                <span class="rx-tag fert">시비</span>
+                <span class="rx-date">2026.01.15</span>
+              </div>
+              <div class="rx-title">동절기 완효성 비료 시비 — 완료</div>
+              <div class="rx-body">완효성 NPK 비료 (12-12-17) 시비 2kg. 지제부 1m 원형 천공 시비. 질소 부족 증상 예방 목적. 시비 후 관수 200L 실시.</div>
+              <div class="rx-doctor">담당 나무의사: 이수민 (세이브트리)</div>
+            </div>
+            <div class="rx-card">
+              <div class="rx-hd">
+                <span class="rx-tag pest">병해충</span>
+                <span class="rx-date">2025.08.10</span>
+              </div>
+              <div class="rx-title">복숭아유리나방 예방 처리 — 완료</div>
+              <div class="rx-body">수간에 예방 약제 도포 처리. 피해 흔적 없음, 예방 목적. 지제부 유인목 설치 5개.</div>
+              <div class="rx-doctor">담당 나무의사: 박재원 (세이브트리)</div>
+            </div>
+            <div class="rx-card">
+              <div class="rx-hd">
+                <span class="rx-tag prune">전지</span>
+                <span class="rx-date">2025.02.20</span>
+              </div>
+              <div class="rx-title">봄 개화 전 정형 전지 — 완료</div>
+              <div class="rx-body">수관 하부 고사지 제거 4가지. 도장지 제거 8가지. 수관 균형 유지 전지. 전정 상처 유합제 도포.</div>
+              <div class="rx-doctor">담당 나무의사: 이수민 (세이브트리)</div>
+            </div>
+            <button class="photo-upload" onclick="openInspectModal('왕벚나무','T-047')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              새 처방 등록
+            </button>
+          </div>
+
+          <!-- ═══════ 탭 3: 사진 ═══════ -->
+          <div class="dp-tab-content" id="dptab3">
+            <div class="ibox">
+              총 <strong>5장</strong>의 사진 · 마지막 촬영 <strong>2026.03.08</strong>
+            </div>
+            <div class="photo-grid">
+              <div class="photo-card"><div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>수관 전체</span></div></div>
+              <div class="photo-card"><div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>수간 근접</span></div></div>
+              <div class="photo-card"><div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>지제부</span></div></div>
+              <div class="photo-card"><div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>토양 센서</span></div></div>
+              <div class="photo-card"><div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>포인트클라우드</span></div></div>
+            </div>
+            <div class="photo-upload" onclick="showToast('success','사진 업로드 기능은 앱에서 지원됩니다')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              사진 추가 업로드
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
-
     <!-- ══ 화면 3: 포인트 클라우드 ══ -->
     <div class="screen" id="screen3" style="overflow:hidden;">
       <div class="pc-wrap">
@@ -1449,13 +1696,13 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" class="cb" id="cbAll" onchange="toggleAllCb(this)"></th>
-                  <th class="sortable">번호 ↕</th>
-                  <th class="sortable">수종 ↕</th>
-                  <th>건강 등급</th>
-                  <th class="sortable">수고 ↕</th>
-                  <th>흉고직경</th>
+                  <th class="sortable" onclick="sortMgmt('id')">번호 ↕</th>
+                  <th class="sortable" onclick="sortMgmt('sp')">수종 ↕</th>
+                  <th class="sortable" onclick="sortMgmt('g')">건강 등급 ↕</th>
+                  <th class="sortable" onclick="sortMgmt('h')">수고 ↕</th>
+                  <th class="sortable" onclick="sortMgmt('dbh')">흉고직경 ↕</th>
                   <th>센서 상태</th>
-                  <th>마지막 점검</th>
+                  <th class="sortable" onclick="sortMgmt('last')">마지막 점검 ↕</th>
                   <th>작업</th>
                 </tr>
               </thead>
@@ -1829,6 +2076,7 @@ function initMarkers() {
     el.className = `tree-marker ${t.g}`;
     el.style.left = t.x + '%'; el.style.top = t.y + '%';
     el.textContent = t.g;
+    el.dataset.sp = t.sp; el.dataset.id = t.id; el.dataset.g = t.g;
     el.onclick = () => showPopup(el, t);
     let drag = false;
     el.addEventListener('mousedown', e => { drag = true; el.style.transition = 'none'; e.preventDefault(); });
@@ -2295,6 +2543,165 @@ function openDelModal(id, sp, g) {
   document.getElementById('delBadge').style.background = {A:'#22a358',B:'#84cc16',C:'#d97706',D:'#dc2626'}[g];
   document.getElementById('delModal').classList.add('vis');
 }
+/* ══════════════════════════════════
+   수목 상세 탭 전환
+══════════════════════════════════ */
+function switchDpTab(n) {
+  document.querySelectorAll('.dp-tab').forEach((t, i) => t.classList.toggle('on', i === n));
+  document.querySelectorAll('.dp-tab-content').forEach((c, i) => c.classList.toggle('on', i === n));
+  if (n === 0) {
+    setTimeout(() => {
+      if (!document.getElementById('moistureChart').children.length) initMoistureChart();
+    }, 50);
+  }
+}
+
+/* ══════════════════════════════════
+   차트 탭 전환 (7일 / 30일 / 90일)
+══════════════════════════════════ */
+const CHART_DATA = {
+  '7d':  [52, 48, 42, 35, 28, 18, 12],
+  '30d': [70, 65, 60, 58, 54, 50, 46, 44, 42, 40, 38, 36, 34, 30, 28, 26, 24, 22, 20, 18, 17, 16, 15, 14, 13, 12, 12, 12, 12, 12],
+  '90d': [72,70,68,66,64,62,60,58,56,55,54,52,50,48,46,44,43,42,41,40,38,36,34,32,30,28,26,24,22,20,
+          18,16,15,14,13,12,12,12,12,12,11,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
+          30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,12,12,12,12,12,12,12,12,12,12,12]
+};
+const CHART_LABELS = {
+  '7d': ['3/5','3/6','3/7','3/8','3/9','3/10','3/11'],
+  '30d': Array.from({length:30}, (_,i) => `2/${i+10}`),
+  '90d': Array.from({length:90}, (_,i) => `1/${i+1}`)
+};
+
+function switchChart(key, btn) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  const labels = {
+    '7d': '토양 수분 추이 (7일)',
+    '30d': '토양 수분 추이 (30일)',
+    '90d': '토양 수분 추이 (90일)'
+  };
+  const el = document.getElementById('chartTitle');
+  if (el) el.textContent = labels[key];
+  drawChart(key);
+}
+
+function drawChart(key) {
+  const el = document.getElementById('moistureChart');
+  if (!el) return;
+  const data = CHART_DATA[key];
+  const max  = 100;
+  const step = key === '7d' ? 1 : key === '30d' ? 3 : 9;
+  el.innerHTML = '';
+  for (let i = 0; i < data.length; i += step) {
+    const v = data[i];
+    const pct = v / max * 100;
+    const isErr  = v < 25;
+    const isWarn = v >= 25 && v < 40;
+    const col = isErr ? 'var(--err)' : isWarn ? 'var(--warn)' : 'var(--green-500)';
+    const bar = document.createElement('div');
+    bar.className = 'bar-item';
+    bar.title = `${CHART_LABELS[key][i]}: ${v}%`;
+    bar.innerHTML = `
+      <div class="bar-track">
+        <div class="bar-fill" style="height:${pct}%;background:${col}"></div>
+      </div>
+      <div class="bar-lbl" style="${key==='90d'?'display:none':''}">${CHART_LABELS[key][i]}</div>`;
+    el.appendChild(bar);
+  }
+}
+
+function initMoistureChart() { drawChart('7d'); }
+
+/* ══════════════════════════════════
+   트리맵 줌
+══════════════════════════════════ */
+let mapScale = 1;
+let mapTransX = 0, mapTransY = 0;
+
+function mapZoom(factor) {
+  mapScale = Math.min(3, Math.max(0.5, mapScale * factor));
+  applyMapTransform();
+}
+
+function mapZoomReset() {
+  mapScale = 1; mapTransX = 0; mapTransY = 0;
+  applyMapTransform();
+}
+
+function applyMapTransform() {
+  const area = document.querySelector('#screen1 .map-area svg.map-bg');
+  const markers = document.getElementById('markers');
+  if (area) {
+    area.style.transform = `scale(${mapScale}) translate(${mapTransX}px, ${mapTransY}px)`;
+    area.style.transformOrigin = 'center center';
+    area.style.transition = 'transform .18s ease';
+  }
+  if (markers) {
+    markers.style.transform = `scale(${mapScale}) translate(${mapTransX}px, ${mapTransY}px)`;
+    markers.style.transformOrigin = 'center center';
+    markers.style.transition = 'transform .18s ease';
+  }
+}
+
+/* (search via oninput on input element) */
+
+/* ══════════════════════════════════
+   트리맵 필터 / 검색
+══════════════════════════════════ */
+const hiddenGrades = new Set();
+
+function toggleGradeFilter(grade, btn) {
+  btn.classList.toggle('on');
+  if (!btn.classList.contains('on')) hiddenGrades.add(grade);
+  else hiddenGrades.delete(grade);
+  applyMarkerFilters();
+}
+
+let mapSearchQ = '';
+function mapSearch(q) {
+  mapSearchQ = q.toLowerCase().trim();
+  document.querySelectorAll('#markers .tree-marker').forEach(m => {
+    m.classList.remove('hl');
+    if (!mapSearchQ) return;
+    const sp = (m.dataset.sp || '').toLowerCase();
+    const id = (m.dataset.id || '').toLowerCase();
+    if (sp.includes(mapSearchQ) || id.includes(mapSearchQ)) m.classList.add('hl');
+  });
+}
+
+function applyMarkerFilters() {
+  document.querySelectorAll('#markers .tree-marker').forEach(m => {
+    const g = m.dataset.g || 'A';
+    m.style.opacity = hiddenGrades.has(g) ? '0.15' : '';
+    m.style.pointerEvents = hiddenGrades.has(g) ? 'none' : '';
+  });
+}
+
+/* ══════════════════════════════════
+   수목 관리 테이블 정렬
+══════════════════════════════════ */
+let sortKey = '', sortDir = 1;
+function sortMgmt(key) {
+  if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+  MGMT_DATA.sort((a, b) => {
+    let va = a[key], vb = b[key];
+    if (typeof va === 'string') va = va.toLowerCase(), vb = vb.toLowerCase();
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
+  renderMgmt(MGMT_DATA);
+  // 헤더 화살표 업데이트
+  document.querySelectorAll('.mgmt-tbl thead th.sortable').forEach(th => {
+    th.textContent = th.textContent.replace(' ↑','').replace(' ↓','').replace(' ↕','') + ' ↕';
+  });
+  const keyMap = {'id':1,'sp':2,'h':4};
+  const colIdx = keyMap[key];
+  if (colIdx !== undefined) {
+    const ths = document.querySelectorAll('.mgmt-tbl thead th');
+    const th = ths[colIdx];
+    if (th) th.textContent = th.textContent.replace(' ↕', sortDir === 1 ? ' ↑' : ' ↓');
+  }
+}
+
 function confirmDelete() {
   const idx = MGMT_DATA.findIndex(t => t.id === deleteTargetId);
   const sp = idx !== -1 ? MGMT_DATA[idx].sp : '';
