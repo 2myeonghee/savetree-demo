@@ -628,6 +628,300 @@
   .pc-btn.sec { background: var(--bg); color: var(--text2); border: 1px solid var(--border); }
   .pc-btn.sec:hover { border-color: var(--border-g); }
 
+  /* ═══════════════════════════════════
+     화면 4: 수목 관리
+  ═══════════════════════════════════ */
+  .mgmt { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; overflow: hidden; }
+  .mgmt-toolbar {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  .mgmt-filters { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .mf-select {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 7px 12px;
+    font-size: 12.5px; font-family: var(--font); color: var(--text2);
+    outline: none; cursor: pointer; transition: all .13s;
+  }
+  .mf-select:hover { border-color: var(--border-g); }
+  .mf-search {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 7px 12px 7px 34px;
+    font-size: 12.5px; font-family: var(--font); color: var(--text);
+    outline: none; transition: all .13s; width: 200px; position: relative;
+  }
+  .mf-search:focus { border-color: var(--border-g); }
+  .search-wrap { position: relative; }
+  .search-wrap svg {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; color: var(--text3); pointer-events: none;
+  }
+  .mgmt-stats { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+  .mgmt-stats strong { color: var(--text); font-weight: 700; }
+
+  /* 관리 테이블 */
+  .tbl-container {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    display: flex; flex-direction: column; flex: 1; min-height: 0;
+    box-shadow: var(--shadow);
+  }
+  .tbl-scroll { overflow-y: auto; flex: 1; }
+  .mgmt-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .mgmt-tbl thead th {
+    background: var(--green-900); color: #fff; font-weight: 700;
+    padding: 11px 14px; text-align: left; font-size: 11.5px; letter-spacing: .1px;
+    position: sticky; top: 0; z-index: 2;
+  }
+  .mgmt-tbl thead th:first-child { width: 40px; }
+  .mgmt-tbl thead th.sortable { cursor: pointer; user-select: none; }
+  .mgmt-tbl thead th.sortable:hover { background: var(--green-800); }
+  .mgmt-tbl tbody td {
+    padding: 11px 14px; border-bottom: 1px solid var(--border2);
+    color: var(--text2); vertical-align: middle; line-height: 1.5;
+  }
+  .mgmt-tbl tbody tr:last-child td { border-bottom: none; }
+  .mgmt-tbl tbody tr:hover td { background: var(--green-50); }
+  .mgmt-tbl tbody tr.sel td { background: var(--green-100); }
+  .mgmt-tbl td.td-id { color: var(--text3); font-size: 12px; }
+  .mgmt-tbl td.td-sp { color: var(--text); font-weight: 700; }
+  .mgmt-tbl td.td-num { text-align: right; color: var(--text2); }
+  .mgmt-tbl td.td-last { font-size: 12px; color: var(--text3); }
+  .mgmt-tbl td.td-act { text-align: right; white-space: nowrap; }
+
+  /* 체크박스 */
+  .cb { width: 15px; height: 15px; accent-color: var(--green-600); cursor: pointer; }
+
+  /* 로우 액션 버튼 */
+  .row-act {
+    display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+    border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    transition: all .12s; font-family: var(--font);
+  }
+  .row-act svg { width: 12px; height: 12px; }
+  .row-act.view { background: var(--green-100); color: var(--green-700); border: 1px solid rgba(26,122,67,.15); }
+  .row-act.view:hover { background: var(--green-500); color: #fff; }
+  .row-act.inspect { background: var(--warn-l); color: var(--warn); border: 1px solid rgba(217,119,6,.15); }
+  .row-act.inspect:hover { background: var(--warn); color: #fff; }
+  .row-act.edit { background: var(--info-l); color: var(--info); border: 1px solid rgba(2,132,199,.15); }
+  .row-act.edit:hover { background: var(--info); color: #fff; }
+  .row-act.del { background: var(--err-l); color: var(--err); border: 1px solid rgba(220,38,38,.15); }
+  .row-act.del:hover { background: var(--err); color: #fff; }
+
+  /* 센서 상태 뱃지 */
+  .sens-badge {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px;
+    border-radius: 20px; font-size: 11px; font-weight: 700;
+  }
+  .sens-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+  .sens-ok   { background: var(--green-100); color: var(--green-700); }
+  .sens-ok::before   { background: var(--green-500); }
+  .sens-warn { background: var(--warn-l); color: var(--warn); }
+  .sens-warn::before { background: var(--warn); }
+  .sens-err  { background: var(--err-l); color: var(--err); }
+  .sens-err::before  { background: var(--err); animation: pulse-err 1.5s infinite; }
+  .sens-off  { background: var(--surface3); color: var(--text3); }
+  .sens-off::before  { background: var(--text3); }
+
+  /* 페이지네이션 */
+  .tbl-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; border-top: 1px solid var(--border2); flex-shrink: 0;
+  }
+  .tbl-footer .tf-info { font-size: 12px; color: var(--text3); }
+  .tbl-footer .tf-info strong { color: var(--text); }
+  .pag { display: flex; align-items: center; gap: 4px; }
+  .pag-btn {
+    width: 30px; height: 30px; border-radius: 7px; font-size: 12.5px; font-weight: 700;
+    cursor: pointer; transition: all .12s; font-family: var(--font);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pag-btn:hover { border-color: var(--border-g); color: var(--green-700); }
+  .pag-btn.on { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .pag-btn svg { width: 13px; height: 13px; }
+
+  /* 선택 툴바 */
+  .sel-toolbar {
+    display: none; align-items: center; gap: 10px;
+    padding: 8px 16px; background: var(--green-100);
+    border-bottom: 1px solid rgba(26,122,67,.15); flex-shrink: 0;
+  }
+  .sel-toolbar.vis { display: flex; }
+  .sel-toolbar .st-info { font-size: 12.5px; font-weight: 700; color: var(--green-700); flex: 1; }
+  .sel-act {
+    display: flex; align-items: center; gap: 5px; padding: 6px 12px;
+    border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: var(--font); transition: all .12s;
+  }
+  .sel-act svg { width: 12px; height: 12px; }
+  .sel-act.export { background: var(--surface); border: 1px solid var(--border); color: var(--text2); }
+  .sel-act.export:hover { border-color: var(--border-g); }
+  .sel-act.delete-sel { background: var(--err-l); border: 1px solid rgba(220,38,38,.2); color: var(--err); }
+  .sel-act.delete-sel:hover { background: var(--err); color: #fff; }
+
+  /* ═══════════════════════════════════
+     모달 공통
+  ═══════════════════════════════════ */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(10,46,26,.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.vis { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(10,46,26,.15), 0 1px 3px rgba(10,46,26,.1);
+    border: 1px solid var(--border);
+    width: 100%; max-width: 540px; max-height: 90vh;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .modal.wide { max-width: 680px; }
+  .modal-hd {
+    padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 12px; flex-shrink: 0;
+  }
+  .modal-icon {
+    width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-icon svg { width: 18px; height: 18px; }
+  .modal-icon.g { background: var(--green-100); } .modal-icon.g svg { color: var(--green-700); }
+  .modal-icon.w { background: var(--warn-l); }    .modal-icon.w svg { color: var(--warn); }
+  .modal-icon.b { background: var(--info-l); }    .modal-icon.b svg { color: var(--info); }
+  .modal-icon.r { background: var(--err-l); }     .modal-icon.r svg { color: var(--err); }
+  .modal-hd .mh-text h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .modal-hd .mh-text p  { font-size: 12.5px; color: var(--text3); }
+  .modal-close {
+    margin-left: auto; width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text3); cursor: pointer; transition: all .12s; flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--surface2); color: var(--text); }
+  .modal-close svg { width: 16px; height: 16px; }
+  .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+  .modal-ft {
+    padding: 14px 24px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+  }
+  .modal-ft .mft-left { margin-right: auto; font-size: 12px; color: var(--text3); }
+
+  /* 스텝 인디케이터 */
+  .step-bar { display: flex; align-items: center; gap: 0; margin-bottom: 22px; }
+  .step-item { display: flex; align-items: center; gap: 0; flex: 1; }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11.5px; font-weight: 800; transition: all .2s;
+  }
+  .step-dot.done { background: var(--green-500); color: #fff; }
+  .step-dot.curr { background: var(--green-700); color: #fff; box-shadow: 0 0 0 4px var(--green-100); }
+  .step-dot.todo { background: var(--surface3); color: var(--text3); }
+  .step-label { font-size: 11px; font-weight: 600; margin-left: 7px; white-space: nowrap; }
+  .step-label.done { color: var(--green-600); }
+  .step-label.curr { color: var(--green-700); font-weight: 700; }
+  .step-label.todo { color: var(--text3); }
+  .step-line { flex: 1; height: 1.5px; background: var(--border); margin: 0 8px; }
+  .step-line.done { background: var(--green-400); }
+
+  /* 폼 필드 */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-row.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+  .form-field label { font-size: 11.5px; font-weight: 700; color: var(--text2); }
+  .form-field label .req { color: var(--err); margin-left: 2px; }
+  .form-input {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 9px 12px; font-size: 13px; font-family: var(--font); color: var(--text);
+    outline: none; transition: all .13s; width: 100%;
+  }
+  .form-input:focus { border-color: var(--border-g); background: var(--green-50); }
+  .form-input::placeholder { color: var(--text3); }
+  select.form-input { cursor: pointer; }
+  textarea.form-input { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  /* 등급 선택 */
+  .grade-pick { display: flex; gap: 8px; }
+  .grade-opt {
+    flex: 1; padding: 9px 6px; border-radius: var(--radius-sm); text-align: center;
+    cursor: pointer; font-size: 12px; font-weight: 800; transition: all .12s;
+    border: 1.5px solid var(--border); background: var(--bg);
+  }
+  .grade-opt:hover { border-color: var(--border-g); }
+  .grade-opt.sel-A { background: var(--green-100); border-color: var(--green-500); color: var(--green-700); }
+  .grade-opt.sel-B { background: #f0fdf4; border-color: #84cc16; color: #4d7c0f; }
+  .grade-opt.sel-C { background: var(--warn-l); border-color: var(--warn); color: var(--warn); }
+  .grade-opt.sel-D { background: var(--err-l); border-color: var(--err); color: var(--err); }
+
+  /* 위치 지정 미니맵 */
+  .loc-map {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    height: 200px; position: relative; overflow: hidden; cursor: crosshair; margin-bottom: 12px;
+  }
+  .loc-pin {
+    position: absolute; transform: translate(-50%, -100%);
+    pointer-events: none; display: none;
+  }
+  .loc-pin svg { width: 24px; height: 24px; color: var(--err); filter: drop-shadow(0 2px 4px rgba(0,0,0,.2)); }
+  .loc-hint { font-size: 12px; color: var(--text3); text-align: center; padding: 4px 0; }
+  .loc-coords { font-size: 11px; color: var(--green-700); font-weight: 700; text-align: center; margin-top: 4px; }
+
+  /* 등록 확인 카드 */
+  .confirm-card {
+    background: var(--green-50); border: 1px solid var(--border-g);
+    border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 14px;
+  }
+  .cc-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--border2); }
+  .cc-row:last-child { border: none; }
+  .cc-row .ck { color: var(--text3); }
+  .cc-row .cv { color: var(--text); font-weight: 700; }
+
+  /* 모달 버튼 */
+  .mbtn {
+    padding: 10px 20px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; transition: all .13s;
+  }
+  .mbtn.primary { background: var(--green-700); color: #fff; border: none; box-shadow: var(--shadow-g); }
+  .mbtn.primary:hover { background: var(--green-600); }
+  .mbtn.secondary { background: var(--surface); color: var(--text2); border: 1px solid var(--border); }
+  .mbtn.secondary:hover { border-color: var(--border-g); }
+  .mbtn.danger { background: var(--err); color: #fff; border: none; }
+  .mbtn.danger:hover { filter: brightness(.9); }
+
+  /* 토스트 */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--green-900); color: #fff; border-radius: 10px;
+    padding: 12px 20px; font-size: 13.5px; font-weight: 700;
+    display: flex; align-items: center; gap: 9px;
+    box-shadow: 0 8px 24px rgba(10,46,26,.25); z-index: 200;
+    opacity: 0; transition: all .3s; pointer-events: none;
+  }
+  .toast.vis { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .toast.success svg { color: var(--green-400); }
+  .toast.warn-t svg { color: var(--warn); }
+  .toast.err-t svg { color: #fca5a5; }
+
+  /* 삭제 확인 모달 */
+  .del-confirm { text-align: center; padding: 8px 0; }
+  .del-confirm h4 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .del-confirm p { font-size: 13.5px; color: var(--text3); line-height: 1.7; }
+  .del-tree-info {
+    display: inline-flex; align-items: center; gap: 8px; margin: 14px 0;
+    background: var(--err-l); border: 1px solid rgba(220,38,38,.2);
+    border-radius: 9px; padding: 10px 16px;
+  }
+  .del-tree-info .dti-badge {
+    width: 28px; height: 28px; border-radius: 8px; background: var(--err);
+    color: #fff; font-size: 11px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .del-tree-info .dti-name { font-size: 14px; font-weight: 800; color: var(--text); }
+  .del-tree-info .dti-id { font-size: 12px; color: var(--text3); }
+
   /* 3D 뷰어 */
   .pc-main { flex: 1; position: relative; overflow: hidden; background: var(--green-900); }
   .pc-overlay {
@@ -701,6 +995,10 @@
       <div class="ni" onclick="nav(3)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
         <span class="nt">포인트 클라우드</span>
+      </div>
+      <div class="ni" onclick="nav(4)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        <span class="nt">수목 관리</span>
       </div>
       <div class="sb-sep"></div>
       <div class="ni">
@@ -1038,7 +1336,7 @@
     </div>
 
     <!-- ══ 화면 3: 포인트 클라우드 ══ -->
-    <div class="screen" id="screen3">
+    <div class="screen" id="screen3" style="overflow:hidden;">
       <div class="pc-wrap">
         <div class="pc-info">
           <div class="pc-info-hd">
@@ -1091,12 +1389,406 @@
       </div>
     </div>
 
+    <!-- ══ 화면 4: 수목 관리 ══ -->
+    <div class="screen" id="screen4">
+      <div class="mgmt">
+        <!-- 툴바 -->
+        <div class="mgmt-toolbar">
+          <div class="mgmt-filters">
+            <select class="mf-select" onchange="filterMgmt()">
+              <option value="">전체 등급</option>
+              <option value="A">A — 우수</option>
+              <option value="B">B — 양호</option>
+              <option value="C">C — 주의</option>
+              <option value="D">D — 위험</option>
+            </select>
+            <select class="mf-select" onchange="filterMgmt()">
+              <option value="">전체 수종</option>
+              <option>왕벚나무</option>
+              <option>느티나무</option>
+              <option>은행나무</option>
+              <option>소나무</option>
+            </select>
+            <select class="mf-select" onchange="filterMgmt()">
+              <option value="">전체 센서</option>
+              <option value="alert">알림 있음</option>
+              <option value="ok">정상</option>
+              <option value="off">미연결</option>
+            </select>
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="mf-search" type="text" placeholder="수종 또는 ID 검색…" oninput="filterMgmt()">
+            </div>
+          </div>
+          <div class="mgmt-stats">
+            총 <strong id="mgmtCount">247</strong>그루
+          </div>
+          <button class="hbtn primary" onclick="openAddModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            수목 등록
+          </button>
+        </div>
+
+        <!-- 선택 툴바 -->
+        <div class="sel-toolbar" id="selToolbar">
+          <div class="st-info" id="selInfo">0개 선택됨</div>
+          <button class="sel-act export" onclick="exportSel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            CSV 내보내기
+          </button>
+          <button class="sel-act delete-sel" onclick="deleteSel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            선택 삭제
+          </button>
+        </div>
+
+        <!-- 테이블 컨테이너 -->
+        <div class="tbl-container">
+          <div class="tbl-scroll">
+            <table class="mgmt-tbl">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="cb" id="cbAll" onchange="toggleAllCb(this)"></th>
+                  <th class="sortable">번호 ↕</th>
+                  <th class="sortable">수종 ↕</th>
+                  <th>건강 등급</th>
+                  <th class="sortable">수고 ↕</th>
+                  <th>흉고직경</th>
+                  <th>센서 상태</th>
+                  <th>마지막 점검</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody id="mgmtTbody"></tbody>
+            </table>
+          </div>
+          <div class="tbl-footer">
+            <div class="tf-info">총 <strong id="mgmtTotal">14</strong>건 / 페이지당 20건</div>
+            <div class="pag">
+              <button class="pag-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="pag-btn on">1</button>
+              <button class="pag-btn">2</button>
+              <button class="pag-btn">3</button>
+              <button class="pag-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.main -->
+</div><!-- /.app -->
+
+<!-- ══════════════════════════════
+     모달: 수목 등록 (3-Step)
+══════════════════════════════ -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal wide">
+    <div class="modal-hd">
+      <div class="modal-icon g">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12M12 12C12 7 8 3 3 3s0 9 9 9M12 12c0-5 4-9 9-9s0 9-9 9"/></svg>
+      </div>
+      <div class="mh-text">
+        <h3>새 수목 등록</h3>
+        <p id="addModalSub">기본 정보를 입력해 주세요</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('addModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- 스텝 바 -->
+      <div class="step-bar" id="addStepBar">
+        <div class="step-item">
+          <div class="step-dot curr" id="sdot1">1</div>
+          <div class="step-label curr" id="slbl1">기본 정보</div>
+        </div>
+        <div class="step-line" id="sline1"></div>
+        <div class="step-item">
+          <div class="step-dot todo" id="sdot2">2</div>
+          <div class="step-label todo" id="slbl2">위치 지정</div>
+        </div>
+        <div class="step-line" id="sline2"></div>
+        <div class="step-item">
+          <div class="step-dot todo" id="sdot3">3</div>
+          <div class="step-label todo" id="slbl3">확인 및 등록</div>
+        </div>
+      </div>
+
+      <!-- Step 1: 기본 정보 -->
+      <div id="addStep1">
+        <div class="form-row">
+          <div class="form-field">
+            <label>수종 <span class="req">*</span></label>
+            <select class="form-input" id="f-sp">
+              <option value="">수종 선택</option>
+              <option>왕벚나무</option><option>느티나무</option><option>은행나무</option>
+              <option>소나무</option><option>벚나무</option><option>플라타너스</option>
+              <option>이팝나무</option><option>메타세쿼이아</option><option>기타</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>등록 일자 <span class="req">*</span></label>
+            <input class="form-input" type="date" id="f-date" value="2026-03-12">
+          </div>
+        </div>
+        <div class="form-row col3">
+          <div class="form-field">
+            <label>수고 (m) <span class="req">*</span></label>
+            <input class="form-input" type="number" step="0.1" placeholder="예: 8.5" id="f-h">
+          </div>
+          <div class="form-field">
+            <label>흉고직경 (cm) <span class="req">*</span></label>
+            <input class="form-input" type="number" step="0.5" placeholder="예: 22" id="f-dbh">
+          </div>
+          <div class="form-field">
+            <label>수관 폭 (m)</label>
+            <input class="form-input" type="number" step="0.1" placeholder="예: 4.2" id="f-crown">
+          </div>
+        </div>
+        <div class="form-field" style="margin-bottom:16px;">
+          <label>초기 건강 등급 <span class="req">*</span></label>
+          <div class="grade-pick">
+            <div class="grade-opt" onclick="pickGrade('A',this)">A<br><span style="font-size:10px;font-weight:500;">우수</span></div>
+            <div class="grade-opt" onclick="pickGrade('B',this)">B<br><span style="font-size:10px;font-weight:500;">양호</span></div>
+            <div class="grade-opt" onclick="pickGrade('C',this)">C<br><span style="font-size:10px;font-weight:500;">주의</span></div>
+            <div class="grade-opt" onclick="pickGrade('D',this)">D<br><span style="font-size:10px;font-weight:500;">위험</span></div>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-field">
+            <label>비고</label>
+            <textarea class="form-input" placeholder="추가 메모 사항 (선택)" id="f-note"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 위치 지정 -->
+      <div id="addStep2" style="display:none;">
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;line-height:1.7;">
+          아래 단지 도면에서 수목 위치를 클릭해 핀을 꽂아 주세요. 드래그로 재조정할 수 있습니다.
+        </p>
+        <div class="loc-map" id="locMap" onclick="placePin(event)">
+          <svg viewBox="0 0 600 200" style="width:100%;height:100%;position:absolute;inset:0;">
+            <rect x="0" y="0" width="600" height="200" fill="#f5f8f6"/>
+            <defs><pattern id="g2" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0L0 0 0 24" fill="none" stroke="rgba(10,46,26,.04)" stroke-width=".6"/></pattern></defs>
+            <rect x="0" y="0" width="600" height="200" fill="url(#g2)"/>
+            <rect x="80" y="12" width="88" height="56" fill="rgba(255,255,255,.85)" stroke="rgba(10,46,26,.1)" stroke-width=".8" rx="3"/>
+            <text x="124" y="44" text-anchor="middle" fill="rgba(10,46,26,.3)" font-size="8" font-family="Pretendard,sans-serif" font-weight="700">101동</text>
+            <rect x="188" y="12" width="88" height="56" fill="rgba(255,255,255,.85)" stroke="rgba(10,46,26,.1)" stroke-width=".8" rx="3"/>
+            <text x="232" y="44" text-anchor="middle" fill="rgba(10,46,26,.3)" font-size="8" font-family="Pretendard,sans-serif" font-weight="700">102동</text>
+            <rect x="296" y="12" width="88" height="56" fill="rgba(255,255,255,.85)" stroke="rgba(10,46,26,.1)" stroke-width=".8" rx="3"/>
+            <text x="340" y="44" text-anchor="middle" fill="rgba(10,46,26,.3)" font-size="8" font-family="Pretendard,sans-serif" font-weight="700">103동</text>
+            <rect x="80" y="86" width="88" height="72" fill="rgba(255,255,255,.85)" stroke="rgba(10,46,26,.1)" stroke-width=".8" rx="3"/>
+            <text x="124" y="126" text-anchor="middle" fill="rgba(10,46,26,.3)" font-size="8" font-family="Pretendard,sans-serif" font-weight="700">201동</text>
+            <rect x="188" y="86" width="88" height="72" fill="rgba(255,255,255,.85)" stroke="rgba(10,46,26,.1)" stroke-width=".8" rx="3"/>
+            <text x="232" y="126" text-anchor="middle" fill="rgba(10,46,26,.3)" font-size="8" font-family="Pretendard,sans-serif" font-weight="700">202동</text>
+            <rect x="420" y="12" width="160" height="170" fill="rgba(34,163,88,.05)" stroke="rgba(26,122,67,.12)" stroke-width=".8" rx="6"/>
+            <text x="500" y="102" text-anchor="middle" fill="rgba(10,46,26,.35)" font-size="10" font-family="Pretendard,sans-serif" font-weight="700">조경공원</text>
+          </svg>
+          <div class="loc-pin" id="locPin">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+        </div>
+        <div class="loc-hint" id="locHint">도면을 클릭해 위치를 지정해 주세요</div>
+        <div class="loc-coords" id="locCoords" style="display:none;"></div>
+      </div>
+
+      <!-- Step 3: 확인 및 등록 -->
+      <div id="addStep3" style="display:none;">
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;line-height:1.7;">
+          아래 정보를 확인하고 등록 버튼을 눌러 주세요.
+        </p>
+        <div class="confirm-card" id="confirmCard"></div>
+        <div class="ibox" style="font-size:12.5px;">
+          등록 완료 후 <strong>수목 관리 목록</strong>에서 즉시 확인할 수 있으며, 트리맵에도 새 마커가 추가됩니다.
+          센서 연결은 세이브트리 담당자가 현장에서 별도 설정합니다.
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <span class="mft-left" id="addStepLabel">Step 1 / 3</span>
+      <button class="mbtn secondary" id="addPrevBtn" onclick="addStep(-1)" style="display:none;">이전</button>
+      <button class="mbtn primary" id="addNextBtn" onclick="addStep(1)">다음</button>
+    </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════
+     모달: 점검 등록
+══════════════════════════════ -->
+<div class="modal-overlay" id="inspectModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-icon w">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <div class="mh-text">
+        <h3>점검 등록</h3>
+        <p id="inspectTreeName">왕벚나무 #T-047</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('inspectModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-field">
+          <label>점검 일자 <span class="req">*</span></label>
+          <input class="form-input" type="date" id="ins-date" value="2026-03-12">
+        </div>
+        <div class="form-field">
+          <label>담당 나무의사 <span class="req">*</span></label>
+          <input class="form-input" type="text" placeholder="성명 입력" id="ins-doctor">
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:16px;">
+        <label>점검 후 건강 등급 <span class="req">*</span></label>
+        <div class="grade-pick">
+          <div class="grade-opt" onclick="pickGrade2('A',this)">A<br><span style="font-size:10px;font-weight:500;">우수</span></div>
+          <div class="grade-opt" onclick="pickGrade2('B',this)">B<br><span style="font-size:10px;font-weight:500;">양호</span></div>
+          <div class="grade-opt" onclick="pickGrade2('C',this)">C<br><span style="font-size:10px;font-weight:500;">주의</span></div>
+          <div class="grade-opt" onclick="pickGrade2('D',this)">D<br><span style="font-size:10px;font-weight:500;">위험</span></div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-field">
+          <label>주요 소견 <span class="req">*</span></label>
+          <textarea class="form-input" placeholder="관찰된 증상, 상태 등을 입력" id="ins-result"></textarea>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-field">
+          <label>처치 방법</label>
+          <textarea class="form-input" style="min-height:64px;" placeholder="관수, 시비, 병해충 처리 등 조치 내용" id="ins-treatment"></textarea>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-field">
+          <label>차기 점검 예정일</label>
+          <input class="form-input" type="date" id="ins-next">
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mbtn secondary" onclick="closeModal('inspectModal')">취소</button>
+      <button class="mbtn primary" onclick="submitInspect()">점검 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     모달: 수목 수정
+══════════════════════════════ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-icon b">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="mh-text">
+        <h3>수목 정보 수정</h3>
+        <p id="editTreeName">왕벚나무 #T-047</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('editModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-field">
+          <label>수종 <span class="req">*</span></label>
+          <select class="form-input" id="e-sp">
+            <option>왕벚나무</option><option>느티나무</option><option>은행나무</option>
+            <option>소나무</option><option>벚나무</option><option>플라타너스</option>
+            <option>이팝나무</option><option>메타세쿼이아</option><option>기타</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Greehill ID</label>
+          <input class="form-input" type="text" placeholder="GH-KR-HEL-XXXX" id="e-ghid">
+        </div>
+      </div>
+      <div class="form-row col3">
+        <div class="form-field">
+          <label>수고 (m) <span class="req">*</span></label>
+          <input class="form-input" type="number" step="0.1" id="e-h">
+        </div>
+        <div class="form-field">
+          <label>흉고직경 (cm) <span class="req">*</span></label>
+          <input class="form-input" type="number" step="0.5" id="e-dbh">
+        </div>
+        <div class="form-field">
+          <label>수관 폭 (m)</label>
+          <input class="form-input" type="number" step="0.1" id="e-crown">
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:16px;">
+        <label>건강 등급 <span class="req">*</span></label>
+        <div class="grade-pick" id="editGradePick">
+          <div class="grade-opt" onclick="pickGrade3('A',this)">A<br><span style="font-size:10px;font-weight:500;">우수</span></div>
+          <div class="grade-opt" onclick="pickGrade3('B',this)">B<br><span style="font-size:10px;font-weight:500;">양호</span></div>
+          <div class="grade-opt" onclick="pickGrade3('C',this)">C<br><span style="font-size:10px;font-weight:500;">주의</span></div>
+          <div class="grade-opt" onclick="pickGrade3('D',this)">D<br><span style="font-size:10px;font-weight:500;">위험</span></div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-field">
+          <label>비고</label>
+          <textarea class="form-input" style="min-height:64px;" id="e-note"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mbtn secondary" onclick="closeModal('editModal')">취소</button>
+      <button class="mbtn primary" onclick="submitEdit()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     모달: 수목 삭제 확인
+══════════════════════════════ -->
+<div class="modal-overlay" id="delModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-body">
+      <div class="del-confirm">
+        <div style="width:52px;height:52px;background:var(--err-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--err)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </div>
+        <h4>수목을 삭제하시겠습니까?</h4>
+        <p>삭제된 수목 데이터는 복구할 수 없습니다.<br>센서 연결 및 진단 이력도 함께 삭제됩니다.</p>
+        <div class="del-tree-info" id="delTreeInfo">
+          <div class="dti-badge" id="delBadge">D</div>
+          <div>
+            <div class="dti-name" id="delName">왕벚나무</div>
+            <div class="dti-id" id="delId">#T-047</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="justify-content:center;gap:12px;">
+      <button class="mbtn secondary" style="min-width:100px;" onclick="closeModal('delModal')">취소</button>
+      <button class="mbtn danger" style="min-width:100px;" onclick="confirmDelete()">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
 <script>
-const titles = ['대시보드', '트리맵', '수목 상세', '포인트 클라우드'];
-const subs   = ['헬리오시티 · 2026년 3월 12일 기준', '헬리오시티 · 수목 위치도', '헬리오시티 · 왕벚나무 #T-047', '왕벚나무 #T-047 · Greehill STI 연동'];
+const titles = ['대시보드', '트리맵', '수목 상세', '포인트 클라우드', '수목 관리'];
+const subs   = [
+  '헬리오시티 · 2026년 3월 12일 기준',
+  '헬리오시티 · 수목 위치도',
+  '헬리오시티 · 왕벚나무 #T-047',
+  '왕벚나무 #T-047 · Greehill STI 연동',
+  '헬리오시티 · 수목 전체 목록'
+];
 
 function nav(n) {
   document.querySelectorAll('.screen').forEach((s, i) => s.classList.toggle('on', i === n));
@@ -1106,6 +1798,7 @@ function nav(n) {
   if (n === 1) initMarkers();
   if (n === 2) initTreeList();
   if (n === 3) initPC();
+  if (n === 4) initMgmt();
 }
 
 /* ── 마커 ── */
@@ -1256,6 +1949,359 @@ function initPC() {
 
 function openGreehill() {
   alert('Greehill Trees 플랫폼으로 이동합니다.\n(https://app.greehill.com/trees/GH-KR-HEL-0047)');
+}
+
+/* ══════════════════════════════════
+   수목 관리 테이블
+══════════════════════════════════ */
+const MGMT_DATA = [
+  {id:'T-047',sp:'왕벚나무',g:'D',h:8.2,dbh:22,sens:'err',  last:'2026-03-08'},
+  {id:'T-089',sp:'소나무',  g:'A',h:6.8,dbh:18,sens:'ok',   last:'2026-02-20'},
+  {id:'T-112',sp:'느티나무',g:'D',h:11.4,dbh:35,sens:'err', last:'2026-03-01'},
+  {id:'T-023',sp:'은행나무',g:'B',h:9.1,dbh:28,sens:'ok',   last:'2026-01-15'},
+  {id:'T-054',sp:'왕벚나무',g:'A',h:7.3,dbh:20,sens:'ok',   last:'2026-02-10'},
+  {id:'T-078',sp:'느티나무',g:'C',h:10.2,dbh:31,sens:'warn',last:'2026-02-28'},
+  {id:'T-134',sp:'소나무',  g:'A',h:5.9,dbh:15,sens:'ok',   last:'2026-01-22'},
+  {id:'T-156',sp:'왕벚나무',g:'B',h:8.4,dbh:24,sens:'ok',   last:'2026-03-05'},
+  {id:'T-178',sp:'은행나무',g:'A',h:10.1,dbh:30,sens:'ok',  last:'2026-02-14'},
+  {id:'T-192',sp:'소나무',  g:'B',h:6.2,dbh:16,sens:'off',  last:'2025-12-20'},
+  {id:'T-203',sp:'은행나무',g:'C',h:9.7,dbh:29,sens:'warn', last:'2026-02-25'},
+  {id:'T-215',sp:'느티나무',g:'A',h:12.0,dbh:38,sens:'ok',  last:'2026-03-10'},
+  {id:'T-229',sp:'왕벚나무',g:'A',h:7.8,dbh:22,sens:'ok',   last:'2026-01-30'},
+  {id:'T-241',sp:'소나무',  g:'B',h:5.5,dbh:14,sens:'off',  last:'2026-02-08'},
+];
+let mgmtInited = false;
+let selectedRows = new Set();
+
+function initMgmt() {
+  if (mgmtInited) return; mgmtInited = true;
+  renderMgmt(MGMT_DATA);
+}
+
+function renderMgmt(data) {
+  const tbody = document.getElementById('mgmtTbody');
+  tbody.innerHTML = '';
+  document.getElementById('mgmtTotal').textContent = data.length;
+  const sensLabel = { ok:'정상', warn:'경고', err:'임계', off:'미연결' };
+  const sensClass = { ok:'sens-ok', warn:'sens-warn', err:'sens-err', off:'sens-off' };
+  const gradeColor = { A:'background:#dcfce7;color:#15803d', B:'background:#f0fdf4;color:#4d7c0f', C:'background:#fef3c7;color:#92400e', D:'background:#fee2e2;color:#991b1b' };
+  data.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.id = 'row-' + t.id;
+    if (selectedRows.has(t.id)) tr.classList.add('sel');
+    tr.innerHTML = `
+      <td><input type="checkbox" class="cb" ${selectedRows.has(t.id)?'checked':''} onchange="toggleRow('${t.id}',this)"></td>
+      <td class="td-id">#${t.id}</td>
+      <td class="td-sp">${t.sp}</td>
+      <td><span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:800;${gradeColor[t.g]}">${t.g} — ${{A:'우수',B:'양호',C:'주의',D:'위험'}[t.g]}</span></td>
+      <td class="td-num">${t.h}m</td>
+      <td class="td-num">${t.dbh}cm</td>
+      <td><span class="sens-badge ${sensClass[t.sens]}">${sensLabel[t.sens]}</span></td>
+      <td class="td-last">${t.last}</td>
+      <td class="td-act">
+        <button class="row-act view" onclick="nav(2)" title="상세 보기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          상세
+        </button>
+        <button class="row-act inspect" onclick="openInspectModal('${t.sp}','${t.id}')" title="점검 등록">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+          점검
+        </button>
+        <button class="row-act edit" onclick="openEditModal('${t.id}','${t.sp}',${t.h},${t.dbh},'${t.g}')" title="수정">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          수정
+        </button>
+        <button class="row-act del" onclick="openDelModal('${t.id}','${t.sp}','${t.g}')" title="삭제">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterMgmt() {
+  const selects = document.querySelectorAll('.mf-select');
+  const gf = selects[0].value, sf = selects[1].value, sensF = selects[2].value;
+  const search = document.querySelector('.mf-search').value.toLowerCase();
+  const filtered = MGMT_DATA.filter(t => {
+    if (gf && t.g !== gf) return false;
+    if (sf && t.sp !== sf) return false;
+    if (sensF === 'alert' && !['err','warn'].includes(t.sens)) return false;
+    if (sensF === 'ok' && t.sens !== 'ok') return false;
+    if (sensF === 'off' && t.sens !== 'off') return false;
+    if (search && !t.sp.includes(search) && !t.id.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderMgmt(filtered);
+}
+
+function toggleRow(id, cb) {
+  if (cb.checked) selectedRows.add(id);
+  else selectedRows.delete(id);
+  updateSelToolbar();
+  const row = document.getElementById('row-' + id);
+  if (row) row.classList.toggle('sel', cb.checked);
+}
+
+function toggleAllCb(cb) {
+  document.querySelectorAll('#mgmtTbody .cb').forEach(c => {
+    c.checked = cb.checked;
+    const id = c.closest('tr').id.replace('row-','');
+    if (cb.checked) selectedRows.add(id); else selectedRows.delete(id);
+    c.closest('tr').classList.toggle('sel', cb.checked);
+  });
+  updateSelToolbar();
+}
+
+function updateSelToolbar() {
+  const n = selectedRows.size;
+  const tb = document.getElementById('selToolbar');
+  tb.classList.toggle('vis', n > 0);
+  document.getElementById('selInfo').textContent = `${n}개 선택됨`;
+}
+
+function exportSel() {
+  showToast('success', `${selectedRows.size}개 수목 CSV 내보내기 완료`);
+}
+function deleteSel() {
+  selectedRows.forEach(id => {
+    const idx = MGMT_DATA.findIndex(t => t.id === id);
+    if (idx !== -1) MGMT_DATA.splice(idx, 1);
+  });
+  selectedRows.clear();
+  document.getElementById('cbAll').checked = false;
+  updateSelToolbar();
+  renderMgmt(MGMT_DATA);
+  showToast('success', '선택한 수목이 삭제되었습니다');
+}
+
+/* ══════════════════════════════════
+   모달 공통
+══════════════════════════════════ */
+function closeModal(id) {
+  document.getElementById(id).classList.remove('vis');
+}
+document.addEventListener('click', e => {
+  ['addModal','inspectModal','editModal','delModal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && e.target === el) closeModal(id);
+  });
+});
+
+function showToast(type, msg) {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toastMsg');
+  t.className = 'toast ' + type;
+  m.textContent = msg;
+  t.classList.add('vis');
+  setTimeout(() => t.classList.remove('vis'), 2800);
+}
+
+/* ══════════════════════════════════
+   수목 등록 모달
+══════════════════════════════════ */
+let addCurrentStep = 1;
+let addGrade = '';
+let pinPlaced = false;
+let pinX = 0, pinY = 0;
+
+function openAddModal() {
+  addCurrentStep = 1; addGrade = ''; pinPlaced = false;
+  document.getElementById('addStep1').style.display = 'block';
+  document.getElementById('addStep2').style.display = 'none';
+  document.getElementById('addStep3').style.display = 'none';
+  document.getElementById('addPrevBtn').style.display = 'none';
+  document.getElementById('addNextBtn').textContent = '다음';
+  document.getElementById('addStepLabel').textContent = 'Step 1 / 3';
+  document.getElementById('addModalSub').textContent = '기본 정보를 입력해 주세요';
+  updateStepBar(1);
+  // 폼 초기화
+  ['f-sp','f-h','f-dbh','f-crown','f-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('f-date').value = '2026-03-12';
+  document.querySelectorAll('#addStep1 .grade-opt').forEach(o => o.className='grade-opt');
+  document.getElementById('locPin').style.display = 'none';
+  document.getElementById('locHint').style.display = 'block';
+  document.getElementById('locCoords').style.display = 'none';
+  document.getElementById('addModal').classList.add('vis');
+}
+
+function updateStepBar(step) {
+  [1,2,3].forEach(i => {
+    const dot = document.getElementById('sdot'+i);
+    const lbl = document.getElementById('slbl'+i);
+    if (i < step)      { dot.className='step-dot done'; lbl.className='step-label done'; dot.innerHTML='✓'; }
+    else if (i===step) { dot.className='step-dot curr'; lbl.className='step-label curr'; dot.textContent=i; }
+    else               { dot.className='step-dot todo'; lbl.className='step-label todo'; dot.textContent=i; }
+    if (i < 3) {
+      const line = document.getElementById('sline'+i);
+      line.className = 'step-line' + (i < step ? ' done' : '');
+    }
+  });
+}
+
+function addStep(dir) {
+  const next = addCurrentStep + dir;
+  if (next < 1 || next > 3) return;
+  // Step 1 유효성
+  if (addCurrentStep === 1 && dir === 1) {
+    if (!document.getElementById('f-sp').value) { showToast('warn-t','수종을 선택해 주세요'); return; }
+    if (!document.getElementById('f-h').value)  { showToast('warn-t','수고를 입력해 주세요'); return; }
+    if (!document.getElementById('f-dbh').value){ showToast('warn-t','흉고직경을 입력해 주세요'); return; }
+    if (!addGrade) { showToast('warn-t','건강 등급을 선택해 주세요'); return; }
+  }
+  // Step 2 유효성
+  if (addCurrentStep === 2 && dir === 1) {
+    if (!pinPlaced) { showToast('warn-t','위치를 지정해 주세요'); return; }
+    buildConfirm();
+  }
+  addCurrentStep = next;
+  document.getElementById('addStep1').style.display = next===1?'block':'none';
+  document.getElementById('addStep2').style.display = next===2?'block':'none';
+  document.getElementById('addStep3').style.display = next===3?'block':'none';
+  document.getElementById('addPrevBtn').style.display = next>1?'':'none';
+  document.getElementById('addNextBtn').textContent = next===3?'등록 완료':'다음';
+  document.getElementById('addStepLabel').textContent = `Step ${next} / 3`;
+  const subs2 = ['기본 정보를 입력해 주세요','도면에서 수목 위치를 지정해 주세요','정보를 확인하고 등록해 주세요'];
+  document.getElementById('addModalSub').textContent = subs2[next-1];
+  updateStepBar(next);
+  if (next === 3) {
+    document.getElementById('addNextBtn').onclick = () => finalizeAdd();
+  } else {
+    document.getElementById('addNextBtn').onclick = () => addStep(1);
+  }
+}
+
+function buildConfirm() {
+  const sp = document.getElementById('f-sp').value;
+  const h  = document.getElementById('f-h').value;
+  const dbh= document.getElementById('f-dbh').value;
+  const crown = document.getElementById('f-crown').value || '미입력';
+  const note  = document.getElementById('f-note').value  || '—';
+  const gradeLabel = {A:'A — 우수', B:'B — 양호', C:'C — 주의', D:'D — 위험'};
+  const newId = 'T-' + (parseInt(MGMT_DATA[MGMT_DATA.length-1].id.replace('T-','')) + 1).toString().padStart(3,'0');
+  document.getElementById('confirmCard').innerHTML = `
+    <div class="cc-row"><span class="ck">수목 ID</span><span class="cv">#${newId}</span></div>
+    <div class="cc-row"><span class="ck">수종</span><span class="cv">${sp}</span></div>
+    <div class="cc-row"><span class="ck">수고</span><span class="cv">${h}m</span></div>
+    <div class="cc-row"><span class="ck">흉고직경</span><span class="cv">${dbh}cm</span></div>
+    <div class="cc-row"><span class="ck">수관 폭</span><span class="cv">${crown}</span></div>
+    <div class="cc-row"><span class="ck">건강 등급</span><span class="cv">${gradeLabel[addGrade]}</span></div>
+    <div class="cc-row"><span class="ck">위치</span><span class="cv">X: ${pinX.toFixed(1)}%, Y: ${pinY.toFixed(1)}%</span></div>
+    <div class="cc-row"><span class="ck">비고</span><span class="cv">${note}</span></div>`;
+}
+
+function finalizeAdd() {
+  const sp = document.getElementById('f-sp').value;
+  const h  = parseFloat(document.getElementById('f-h').value);
+  const dbh= parseFloat(document.getElementById('f-dbh').value);
+  const newId = 'T-' + (parseInt(MGMT_DATA[MGMT_DATA.length-1].id.replace('T-','')) + 1).toString().padStart(3,'0');
+  MGMT_DATA.push({ id: newId, sp, g: addGrade, h, dbh, sens:'off', last:'2026-03-12' });
+  mgmtInited = false; // 재렌더 트리거
+  closeModal('addModal');
+  initMgmt();
+  showToast('success', `${sp} #${newId} 등록 완료 · 센서 연결 대기 중`);
+}
+
+let selectedGrade = '';
+function pickGrade(g, el) {
+  addGrade = g;
+  document.querySelectorAll('#addStep1 .grade-opt').forEach(o => o.className='grade-opt');
+  el.className = 'grade-opt sel-' + g;
+}
+
+function placePin(e) {
+  const map = document.getElementById('locMap');
+  const r = map.getBoundingClientRect();
+  pinX = (e.clientX - r.left) / r.width * 100;
+  pinY = (e.clientY - r.top)  / r.height * 100;
+  const pin = document.getElementById('locPin');
+  pin.style.display = 'block';
+  pin.style.left = pinX + '%';
+  pin.style.top  = pinY + '%';
+  pinPlaced = true;
+  document.getElementById('locHint').style.display = 'none';
+  document.getElementById('locCoords').style.display = 'block';
+  document.getElementById('locCoords').textContent = `위치 지정됨 — X: ${pinX.toFixed(1)}%, Y: ${pinY.toFixed(1)}%`;
+}
+
+/* ══════════════════════════════════
+   점검 등록 모달
+══════════════════════════════════ */
+let inspectGrade = '';
+function openInspectModal(sp, id) {
+  inspectGrade = '';
+  document.getElementById('inspectTreeName').textContent = `${sp} #${id}`;
+  document.querySelectorAll('#inspectModal .grade-opt').forEach(o => o.className='grade-opt');
+  document.getElementById('ins-result').value = '';
+  document.getElementById('ins-treatment').value = '';
+  document.getElementById('ins-doctor').value = '';
+  document.getElementById('inspectModal').classList.add('vis');
+}
+function pickGrade2(g, el) {
+  inspectGrade = g;
+  document.querySelectorAll('#inspectModal .grade-opt').forEach(o => o.className='grade-opt');
+  el.className = 'grade-opt sel-' + g;
+}
+function submitInspect() {
+  if (!document.getElementById('ins-doctor').value) { showToast('warn-t','담당 나무의사 성명을 입력해 주세요'); return; }
+  if (!inspectGrade) { showToast('warn-t','점검 후 건강 등급을 선택해 주세요'); return; }
+  if (!document.getElementById('ins-result').value)  { showToast('warn-t','주요 소견을 입력해 주세요'); return; }
+  closeModal('inspectModal');
+  showToast('success', '점검 기록이 저장되었습니다');
+}
+
+/* ══════════════════════════════════
+   수목 수정 모달
+══════════════════════════════════ */
+let editGrade = '', editTargetId = '';
+function openEditModal(id, sp, h, dbh, g) {
+  editTargetId = id; editGrade = g;
+  document.getElementById('editTreeName').textContent = `${sp} #${id}`;
+  document.getElementById('e-sp').value  = sp;
+  document.getElementById('e-h').value   = h;
+  document.getElementById('e-dbh').value = dbh;
+  document.getElementById('e-ghid').value = `GH-KR-HEL-${id.replace('T-','')}`;
+  document.querySelectorAll('#editGradePick .grade-opt').forEach((o, i) => {
+    const grades = ['A','B','C','D'];
+    o.className = 'grade-opt' + (grades[i]===g ? ' sel-'+g : '');
+  });
+  document.getElementById('editModal').classList.add('vis');
+}
+function pickGrade3(g, el) {
+  editGrade = g;
+  document.querySelectorAll('#editGradePick .grade-opt').forEach(o => o.className='grade-opt');
+  el.className = 'grade-opt sel-' + g;
+}
+function submitEdit() {
+  const sp  = document.getElementById('e-sp').value;
+  const h   = parseFloat(document.getElementById('e-h').value);
+  const dbh = parseFloat(document.getElementById('e-dbh').value);
+  const t = MGMT_DATA.find(t => t.id === editTargetId);
+  if (t) { t.sp = sp; t.h = h; t.dbh = dbh; t.g = editGrade; }
+  closeModal('editModal');
+  renderMgmt(MGMT_DATA);
+  showToast('success', `${sp} #${editTargetId} 정보가 수정되었습니다`);
+}
+
+/* ══════════════════════════════════
+   수목 삭제 모달
+══════════════════════════════════ */
+let deleteTargetId = '';
+function openDelModal(id, sp, g) {
+  deleteTargetId = id;
+  document.getElementById('delName').textContent = sp;
+  document.getElementById('delId').textContent = '#' + id;
+  document.getElementById('delBadge').textContent = g;
+  document.getElementById('delBadge').style.background = {A:'#22a358',B:'#84cc16',C:'#d97706',D:'#dc2626'}[g];
+  document.getElementById('delModal').classList.add('vis');
+}
+function confirmDelete() {
+  const idx = MGMT_DATA.findIndex(t => t.id === deleteTargetId);
+  const sp = idx !== -1 ? MGMT_DATA[idx].sp : '';
+  if (idx !== -1) MGMT_DATA.splice(idx, 1);
+  closeModal('delModal');
+  renderMgmt(MGMT_DATA);
+  showToast('success', `${sp} #${deleteTargetId}가 삭제되었습니다`);
 }
 </script>
 </body>
